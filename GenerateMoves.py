@@ -9,10 +9,13 @@ board accesses --> board[row][col]
 a move is defined as a list of tuples [(old_pos),(new_pos)]
 """
 
-"""
-A possible idea is to make the pieces as classes (general class "Piece" and inherited classes for individual pieces)
-and then have the individual classes have the methods that generate moves"""
-
+# Weights of all the pieces (also used for identification)
+PAWN = 2
+ROOK = 10
+KNIGHT = 8
+BISHOP = 8
+QUEEN = 12
+KING = 16
 
 
 def generate_moves(player, board):
@@ -22,18 +25,15 @@ def generate_moves(player, board):
     :param board: current configuration of the board
     :return: a list of all possible moves
     """
-    """
     move_list = []
-    for each row
-        for each col
-            if CS.who(board[row][col]) == current_player
-            generate all the moves for that piece
-            find_moves_for_piece((row, col), board)
-            ->  Have a helper method which is a giant list of if statements
-            ->  That helper method calls other helper methods to generate a list
+    for row in board:
+        for col in board[row]:
+            if CS.who(board[row][col]) == player:
+                piece_list = find_moves_for_piece((row, col), board)
+                move_list.append(piece_list)
     
     return move_list
-    """
+
 
 def find_moves_for_piece(piece_pos, board):
     """
@@ -42,22 +42,24 @@ def find_moves_for_piece(piece_pos, board):
     :param board: current configuration of the board
     :return: a list of all moves possible by that piece
     """
-    """
     return_list = []
-    if pawn:
+    piece = board[piece_pos[0]][piece_pos[1]]
+    piece -= (piece % 2)
+    if piece == PAWN:
         generate_pawn(piece_pos, board, return_list)
-    if rook:
+    if piece == ROOK:
         generate_rook(piece_pos, board, return_list)
-    if knight:
+    if piece == KNIGHT:
         generate_knight(piece_pos, board, return_list)
-    if bishop:
+    if piece == BISHOP:
         generate_bishop(piece_pos, board, return_list)
-    if queen:
+    if piece == QUEEN:
         generate_queen(piece_pos, board, return_list)
-    if king:
+    if piece == KING:
         generate_king(piece_pos, board, return_list)
     
-    return return_list"""
+    return return_list
+
 
 def generate_pawn(pos, board, list):
     """
@@ -84,6 +86,7 @@ def generate_pawn(pos, board, list):
         add move
     (check if it can kill backwards (bottom left and bottom right)
     """
+
 
 def generate_rook(pos, board, list):
     """
