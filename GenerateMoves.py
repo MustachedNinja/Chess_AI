@@ -10,12 +10,15 @@ a move is defined as a list of tuples [(old_pos),(new_pos)]
 """
 
 # Weights of all the pieces (also used for identification)
+# White is EVENS (PLAYER 0) and Black is ODDS (PLAYER 1)
 PAWN = 2
 ROOK = 10
 KNIGHT = 8
 BISHOP = 8
 QUEEN = 12
 KING = 16
+
+PLAYER = CS.PLAYER
 
 
 def generate_moves(player, board):
@@ -70,35 +73,137 @@ def generate_pawn(pos, board, list):
     :return: none
     """
     """
-    Pawns can move one ahead, or two ahead if they are in their initial position (check official rules)
-    They can capture by moving to the top left or top right   
-    # non-lethal moves
-    if there is space infront of the pawn:
-        add a move
-    if the pawn is in the initial position:
-        if there is space two tiles ahead:
-            add pos[0] + 1, pos[1] + 1
-    
-    # lethal moves
-    if there is an enemy piece to the top left:
-        add move
-    if there is an enemy piece to the top right:
-        add move
-    (check if it can kill backwards (bottom left and bottom right)
+    Pawns can move one ahead, or two ahead if they are in their initial position
+    They can capture by moving to the top left or top right
+    We are ignoring the 'En passant' rule
     """
+
+    if PLAYER == 0:
+        # Try moving one space forward
+        top_pos = (pos[0] + 1, pos[1])
+        if legal_move(top_pos):
+            top_piece = board[top_pos[0]][top_pos[1]]
+            if top_piece == 0:
+                move = [pos, top_pos]
+                list.append(move)
+                
+        # If in the starting position and you can move two spaces forward
+        if pos[0] == 1:
+            top_pos = (pos[0] + 2, pos[1])
+            top_piece = board[top_pos[0]][top_pos[1]]
+            if top_piece == 0:
+                move = [pos, top_pos]
+                list.append(move)
+        
+        # Check all the kill moves for White pawns
+        kill_pos1 = (pos[0] + 1, pos[1] + 1)
+        kill_pos2 = (pos[0] + 1, pos[1] - 1)
+        if legal_move(kill_pos1):
+            kill_piece1 = board[kill_pos1[0]][kill_pos1[1]]
+            if kill_piece1 % 2 == 1:
+                move = [pos, kill_pos1]
+                list.append(move)
+        if legal_move(kill_pos2):
+            kill_piece2 = board[kill_pos2[0]][kill_pos2[1]]
+            if kill_piece2 % 2 == 1:
+                move = [pos, kill_pos1]
+                list.append(move)
+                
+    if PLAYER == 1:
+        # Try moving one space forward
+        top_pos = (pos[0] - 1, pos[1])
+        if legal_move(top_pos):
+            top_piece = board[top_pos[0]][top_pos[1]]
+            if top_piece == 0:
+                move = [pos, top_pos]
+                list.append(move)
+                
+        # If in the starting position and you can move two spaces forward
+        if pos[0] == 6:
+            top_pos = (pos[0] - 2, pos[1])
+            top_piece = board[top_pos[0]][top_pos[1]]
+            if top_piece == 0:
+                move = [pos, top_pos]
+                list.append(move)
+        
+        # Check all the kill moves for Black pawns
+        kill_pos1 = (pos[0] + 1, pos[1] + 1)
+        kill_pos2 = (pos[0] + 1, pos[1] - 1)
+        if legal_move(kill_pos1):
+            kill_piece1 = board[kill_pos1[0]][kill_pos1[1]]
+            if kill_piece1 % 2 == 0 and kill_piece1 != 0:
+                move = [pos, kill_pos1]
+                list.append(move)
+        if legal_move(kill_pos2):
+            kill_piece2 = board[kill_pos2[0]][kill_pos2[1]]
+            if kill_piece2 % 2 == 0 and kill_piece2 != 0:
+                move = [pos, kill_pos1]
+                list.append(move)
+
+
+def generate_knight(pos, board, list):
+    directions = [(1, 2), (-1, 2), (1, -2), (-1, -2), (2, 1), (-2, 1), (2, -1), (-2, -1)]
+    for direction in directions:
+        directional_moves(pos, board, direction, 1, list)
+
+
+def generate_king(pos, board, list):
+    directions = [(1, 1), (-1, -1), (1, -1), (-1, 1), (1, 0), (-1, 0), (0, 1), (0, -1)]
+    for direction in directions:
+        directional_moves(pos, board, direction, 1, list)
 
 
 def generate_rook(pos, board, list):
+    directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]
+    for direction in directions:
+        directional_moves(pos, board, direction, 8, list)
+
+
+def generate_bishop(pos, board, list):
+    directions = [(1, 1), (-1, -1), (1, -1), (-1, 1)]
+    for direction in directions:
+        directional_moves(pos, board, direction, 8, list)
+
+
+def generate_queen(pos, board, list):
+    directions = [(1, 1), (-1, -1), (1, -1), (-1, 1), (1, 0), (-1, 0), (0, 1), (0, -1)]
+    for direction in directions:
+        directional_moves(pos, board, direction, 8, list)
+
+
+def directional_moves(pos, board, direction, step_size,  list):
     """
-    Generates all possible moves for a rook at the given pos
-    :param pos: position of the pawn represented by a tuple (row, col)
-    :param board: current state of the board
-    :param list: list of possible moves which will be added to
+    Generates moves in a given direction and adds them to the given list
+    :param pos: starting position of the piece given as a tuple (row, col)
+    :param board: current state of the board given by a 2D array of ints
+    :param direction: tuple indicating direction of movement
+    :param step_size: max number of steps to take in the given direction
+    :param list: list of moves to be appended to
     :return: none
     """
+    new_pos = (pos[0] + direction[0], pos[1] + direction[1])
+    new_piece = board[new_pos[0]][[new_pos[1]]]
+    found_enemy = False
+    while legal_move(new_pos) and (new_piece == 0 or new_piece % 2 != PLAYER) and step_size != 0:
+        if new_piece % 2 != PLAYER and new_piece != 0:
+            found_enemy = True
+        move = [pos, new_pos]
+        list.append(move)
+        if found_enemy:
+            break
+        new_pos[0] += direction[0]
+        new_pos[1] += direction[1]
+        new_piece = board[new_pos[0]][new_pos[1]]
+        step_size -= 1
+
+
+def legal_move(pos):
     """
-    Rooks can move forward and backwards as much as they want, and can kill the same way
-    Also, if the king and rook have not moved this game, they can do a fancy position switch (don't add this yet)
-    # non-lethal moves
-    if space above rook i
+    Checks if a given move is within the bounds of the board
+    :param pos: position of move as represented by a tuple [row, col]
+    :return: True or false
     """
+    if 0 <= pos[0] < 8 and 0 <= pos[1] < 8:
+            return True
+    else:
+        return False
