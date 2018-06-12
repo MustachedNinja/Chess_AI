@@ -54,8 +54,8 @@
       <file leaf-file-name="GenerateMoves.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/GenerateMoves.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="336">
-              <caret line="184" column="47" lean-forward="true" selection-start-line="184" selection-start-column="47" selection-end-line="184" selection-end-column="47" />
+            <state relative-caret-position="252">
+              <caret line="180" column="48" lean-forward="true" selection-start-line="180" selection-start-column="48" selection-end-line="180" selection-end-column="48" />
               <folding />
             </state>
           </provider>
@@ -409,8 +409,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/GenerateMoves.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="336">
-          <caret line="184" column="47" lean-forward="true" selection-start-line="184" selection-start-column="47" selection-end-line="184" selection-end-column="47" />
+        <state relative-caret-position="252">
+          <caret line="180" column="48" lean-forward="true" selection-start-line="180" selection-start-column="48" selection-end-line="180" selection-end-column="48" />
           <folding />
         </state>
       </provider>
