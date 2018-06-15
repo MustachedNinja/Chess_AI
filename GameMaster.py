@@ -102,9 +102,9 @@ def run_game():
         global CURRENT_PLAYER
         CURRENT_PLAYER = who
         if WHITEs_turn:
-            move_fn = player1.makeMove
+            move_fn = player1.make_move
         else:
-            move_fn = player2.makeMove
+            move_fn = player2.make_move
         player_result = timeout(move_fn, args=(current_state, current_remark, TIME_PER_MOVE), kwargs={},
                                 timeout_duration=TIME_PER_MOVE, default=(None, "I give up!"))
         WHITEs_turn = not WHITEs_turn
