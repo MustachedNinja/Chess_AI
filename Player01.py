@@ -60,3 +60,41 @@ def dumb_heuristic(board):
                 elif piece % 2 == PLAYERS_TURN:
                     count += piece
     return count
+
+
+def generate_evaluate_moves(board):
+    import EvaluatePiece as EVAL
+
+    move_list = []
+    bishop_count = 0
+
+    for row in board:
+        for col in board[row]:
+            if CS.who(board[row][col]) == PLAYERS_TURN:
+
+                piece_pos = (row, col)
+                piece = board[piece_pos[0]][piece_pos[1]]
+                piece -= (piece % 2)
+                piece_list = []
+
+                if piece == MOVES.PAWN:
+                    MOVES.generate_pawn(piece_pos, board, piece_list, PLAYERS_TURN)
+                    piece_val = EVAL.eval_pawn(piece_pos, board, PLAYERS_TURN)
+                if piece == MOVES.ROOK:
+                    MOVES.generate_rook(piece_pos, board, piece_list, PLAYERS_TURN)
+                    piece_val = EVAL.eval_rook(piece_pos, board, PLAYERS_TURN)
+                if piece == MOVES.KNIGHT:
+                    MOVES.generate_knight(piece_pos, board, piece_list, PLAYERS_TURN)
+                    piece_val = EVAL.eval_knight(piece_pos, board, PLAYERS_TURN)
+                if piece == MOVES.BISHOP:
+                    bishop_count++
+                    MOVES.generate_bishop(piece_pos, board, piece_list, PLAYERS_TURN)
+                    piece_val = EVAL.eval_bishop(piece_pos, board, PLAYERS_TURN)
+                if piece == MOVES.QUEEN:
+                    MOVES.generate_queen(piece_pos, board, piece_list, PLAYERS_TURN)
+                    piece_val = EVAL.eval_queen(piece_pos, board, PLAYERS_TURN)
+                if piece == MOVES.KING:
+                    MOVES.generate_king(piece_pos, board, piece_list, PLAYERS_TURN)
+                    piece_val = EVAL.eval_king(piece_pos, board, PLAYERS_TURN)
+    
+    return move_list

@@ -11,12 +11,14 @@ a move is defined as a list of tuples [(old_pos),(new_pos)]
 
 # Weights of all the pieces (also used for identification)
 # White is EVENS (PLAYER 0) and Black is ODDS (PLAYER 1)
-PAWN = 2
-ROOK = 10
-KNIGHT = 8
-BISHOP = 8
-QUEEN = 12
-KING = 16
+PAWN = 100
+ROOK = 500
+KNIGHT = 320
+BISHOP = 325
+QUEEN = 975
+KING = 40000
+
+PLAYER = None
 
 
 def generate_moves(player, board):
@@ -64,7 +66,7 @@ def find_moves_for_piece(piece_pos, board):
     return return_list
 
 
-def generate_pawn(pos, board, list):
+def generate_pawn(pos, board, list, player):
     """
     Generates all possible moves for a pawn at the given position
     :param pos: position of the pawn represented by a tuple (row, col)
@@ -77,6 +79,8 @@ def generate_pawn(pos, board, list):
     They can capture by moving to the top left or top right
     We are ignoring the 'En passant' rule
     """
+    global PLAYER
+    PLAYER = player
 
     if PLAYER == 0:
         # Try moving one space forward
@@ -141,31 +145,41 @@ def generate_pawn(pos, board, list):
                 list.append(move)
 
 
-def generate_knight(pos, board, list):
+def generate_knight(pos, board, list, player):
+    global PLAYER
+    PLAYER = player
     directions = [(1, 2), (-1, 2), (1, -2), (-1, -2), (2, 1), (-2, 1), (2, -1), (-2, -1)]
     for direction in directions:
         directional_moves(pos, board, direction, 1, list)
 
 
-def generate_king(pos, board, list):
+def generate_king(pos, board, list, player):
+    global PLAYER
+    PLAYER = player
     directions = [(1, 1), (-1, -1), (1, -1), (-1, 1), (1, 0), (-1, 0), (0, 1), (0, -1)]
     for direction in directions:
         directional_moves(pos, board, direction, 1, list)
 
 
-def generate_rook(pos, board, list):
+def generate_rook(pos, board, list, player):
+    global PLAYER
+    PLAYER = player
     directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]
     for direction in directions:
         directional_moves(pos, board, direction, 8, list)
 
 
-def generate_bishop(pos, board, list):
+def generate_bishop(pos, board, list, player):
+    global PLAYER
+    PLAYER = player
     directions = [(1, 1), (-1, -1), (1, -1), (-1, 1)]
     for direction in directions:
         directional_moves(pos, board, direction, 8, list)
 
 
-def generate_queen(pos, board, list):
+def generate_queen(pos, board, list, player):
+    global PLAYER
+    PLAYER = player
     directions = [(1, 1), (-1, -1), (1, -1), (-1, 1), (1, 0), (-1, 0), (0, 1), (0, -1)]
     for direction in directions:
         directional_moves(pos, board, direction, 8, list)
