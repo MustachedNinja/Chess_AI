@@ -18,8 +18,6 @@ BISHOP = 8
 QUEEN = 12
 KING = 16
 
-PLAYER = CS.PLAYER
-
 
 def generate_moves(player, board):
     """
@@ -28,10 +26,12 @@ def generate_moves(player, board):
     :param board: current configuration of the board
     :return: a list of all possible moves
     """
+    global PLAYER
+    PLAYER = player
     move_list = []
     for row in board:
         for col in board[row]:
-            if CS.who(board[row][col]) == player:
+            if CS.who(board[row][col]) == PLAYER:
                 piece_list = find_moves_for_piece((row, col), board)
                 move_list.append(piece_list)
     
