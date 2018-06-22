@@ -13,17 +13,19 @@ def parse(initial_state_string):
     """
 
     b = [[0, 0, 0, 0, 0, 0, 0, 0] for r in range(8)] #build 2D array
-    rs9 = bs.split("\n")
+    rs9 = initial_state_string.split("\n")
     rs8 = rs9[1:]  # eliminate the empty first item.
     for iy in range(8):
         rss = rs8[iy].split(' ')
         for jx in range(8):
-            b[iy][jx] = INIT_TO_CODE[rss[jx]]
+            b[iy][jx] = BOARD_PIECES_NUMBERS[rss[jx]]
     return b
 
 
 
 # ODDS = lowercase letters = Black (Player 1)
+BLACK = 1
+WHITE = 0
 BOARD_PIECES_NUMBERS = {0:'-', 
 1:'p' ,2:'P', 
 3: 'h' , 4: 'H' ,
@@ -47,9 +49,6 @@ R K B Q K B H R
 )
 
 
-
-
-
 def who(piece):
     """
     Determines the piece's player or "color"
@@ -62,3 +61,46 @@ def who(piece):
 
 
 class ChessState:
+    def __init__(self, old_board=INITIAL_BOARD, whose_move=WHITE):
+        new_board = [r[:] for r in old_board]  # Deeply copy the board.
+        self.board = new_board
+        self.whose_move = whose_move
+
+    def __repr__(self):  # Produce an ASCII display of the state.
+        s = ''
+        for r in range(8):
+            for c in range(8):
+                s += BOARD_PIECES_NUMBERS[self.board[r][c]] + " "
+            s += "\n"
+        if self.whose_move == WHITE:
+            s += "WHITE's move"
+        else:
+            s += "BLACK's move"
+        s += "\n"
+
+        return s
+
+    def __eq__(self, other):
+        if not (type(other) == type(self)):
+            return False
+        if self.whose_move != other.whose_move:
+            return False
+        try:
+            b1 = self.board
+            b2 = other.board
+            for i in range(8):
+                for j in range(8):
+                    if b1[i][j] != b2[i][j]:
+                        return False
+            return True
+        except Exception as e:
+            return False
+
+
+def test_starting_board():
+    init_state = ChessState(INITIAL_BOARD, WHITE)
+    print(init_state)
+
+
+if __name__ == "__main__":
+    test_starting_board()

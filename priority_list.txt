@@ -3,8 +3,8 @@
 ----------------
 
 EARLY
-    - Chess State (Ben)
-    - GameMaster (Kostya)
+    - Chess State (Ben), done
+    - GameMaster (Kostya), done
 
     - Heuristic (Kostya)
         * have code be within Player 1
