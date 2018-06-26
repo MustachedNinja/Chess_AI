@@ -49,34 +49,73 @@ king_table =
  [ 20, 30, 10,  0,  0, 10, 30, 20]]
 
 
+def eval_piece(pos, board):
+	"""
+	Calculates a score based on whether a piece is attacked or defended. 
+	Promotes being defended with no attackers.
+	param pos: position of piece on board as a tuple of ints
+	param board: current board configuration as a 2D array of ints
+	return: the score depending on whether the piece is defended or attacked
+	"""
+	score = 0
+	defended_val = is_defended(pos, board)
+	attacked_val = is_attacked(pos, board)
+	if defended_val < abs(attacked_val):
+		score += 2 * attacked_val
+	else:
+		score += (defended_val + attacked_val)
+	return score
+
+
 def eval_pawn(pos, board, player):
 	global PLAYER
 	PLAYER = player
+	score = CS.PAWN
+	score += pawn_weights[pos[0]][pos[1]]
+	score += eval_piece(pos, board)
+	return score
 
 
 def eval_rook(pos, board, player):
 	global PLAYER
 	PLAYER = player
+	score = CS.ROOK
+	score += eval_piece(pos, board)
+	return score
 
 
 def eval_knight(pos, board, player):
 	global PLAYER
 	PLAYER = player
-
+	score = CS.KNIGHT
+	score += knight_weights[pos[0]][pos[1]]
+	score += eval_piece(pos, board)
+	return score
 
 def eval_bishop(pos, board, player):
 	global PLAYER
 	PLAYER = player
+	score = CS.BISHOP
+	score += bishop_weights[pos[0]][pos[1]]
+	score += eval_piece(pos, board)
+	return score
 
 
 def eval_queen(pos, board, player):
 	global PLAYER
 	PLAYER = player
+	score = CS.QUEEN
+	score += eval_piece(pos, board)
+	return score
 
 
 def eval_king(pos, board, player):
 	global PLAYER
 	PLAYER = player
+	score = CS.KING
+	score += knight_weights[pos[0]][pos[1]]
+	score += eval_piece(pos, board)
+	return score
 
 
 def is_defended(pos, board):
@@ -97,7 +136,7 @@ def is_defended(pos, board):
 	total_list.append(knight_pos)
 	queen_check(pos, board, total_list, PLAYER)
 
-	piece = board[pos[0]][pos[1]] - player
+	piece = board[pos[0]][pos[1]] - PLAYER
 
 	for piece_pos in total_list:
 		if CS.legal_move(piece_pos):
@@ -105,11 +144,11 @@ def is_defended(pos, board):
 			defend_piece = board[piece_pos[0]][piece_pos[1]]
 			defend_piece = defend_piece - defend_piece % 2
 
-			if defend_piece is not 0 and defend_piece % 2 is player:
+			if defend_piece is not 0 and defend_piece % 2 is PLAYER:
 				if piece > defend_piece:
 					return 15
 				elif piece < defend_piece:
-					return -15
+					return 7
 				else
 					return 0
 
@@ -137,7 +176,7 @@ def is_attacked(pos, board):
 	
 	queen_check(pos, board, total_list, enemy)
 
-	piece = board[pos[0]][pos[1]] - player
+	piece = board[pos[0]][pos[1]] - PLAYER
 
 	for piece_pos in total_list:
 		if CS.legal_move(piece_pos):
@@ -149,7 +188,7 @@ def is_attacked(pos, board):
 				if piece > attack_piece:
 					return -15
 				elif piece < attack_piece:
-					return 15
+					return -7
 				else
 					return 0
 

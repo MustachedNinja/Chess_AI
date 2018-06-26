@@ -25,7 +25,7 @@ def make_move(current_state, current_remark, time_limit):
     new_state = CS.ChessState(current_state.board)
 
     new_state.whose_move = 1 - current_state.whose_move
-    moves_list = MOVES.generate_moves(PLAYERS_TURN, current_state.board)
+    move_list = MOVES.generate_moves(PLAYERS_TURN, current_state.board)
 
     try:
         move = random.choice(moves_list)
@@ -46,6 +46,11 @@ def update_board(new_state, move):
 
 
 def prepare():
+    # this is the code used to evaluate the value of the current board 
+    # and find all the possible moves from it
+    move_info = generate_evaluate_moves(current_state.board)
+    board_val = move_info[0]
+    move_list = move_info[1]
     pass
 
 
@@ -63,10 +68,18 @@ def dumb_heuristic(board):
 
 
 def generate_evaluate_moves(board):
+    """
+    Used ONLY in the prepare function, not to be used in make_move
+    When precomputing, this function evaluates the heuristic value of the current board
+    as well as all possible moves from the current board
+    param board: the current board as a 2D array of ints
+    return: an array of the format [heuristic_value, list_of_moves]
+    """
     import EvaluatePiece as EVAL
 
     move_list = []
     bishop_count = 0
+    board_count = 0
 
     for row in board:
         for col in board[row]:
@@ -96,5 +109,10 @@ def generate_evaluate_moves(board):
                 if piece == MOVES.KING:
                     MOVES.generate_king(piece_pos, board, piece_list, PLAYERS_TURN)
                     piece_val = EVAL.eval_king(piece_pos, board, PLAYERS_TURN)
-    
-    return move_list
+                piece_val += len(piece_list)
+                board_count += piece_val
+    if bishop_count is 2:
+        board_count += 10
+
+    return_list = [board_count, move_list]
+    return return_list
