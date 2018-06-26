@@ -233,8 +233,16 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
+<<<<<<< HEAD
+    <frame x="-9" y="-9" width="1938" height="1098" extended-state="6" />
+<<<<<<< HEAD
+=======
     <frame x="683" y="0" width="683" height="768" extended-state="0" />
     <editor active="true" />
+>>>>>>> 51a6f31aee1c57a454d7009dcd2ee003a9f0bbe0
+=======
+    <editor active="true" />
+>>>>>>> parent of 64e6f58... meep
     <layout>
 <<<<<<< HEAD
 <<<<<<< HEAD
