@@ -5,7 +5,7 @@ Used to evaluate the static value of a piece at a given position on the board
 import ChessState as CS
 import GenerateMoves as MOVES
 
-PLAYER = None
+PLAYER = 0
 
 
 pawn_weights =   
@@ -49,6 +49,17 @@ king_table =
  [ 20, 30, 10,  0,  0, 10, 30, 20]]
 
 
+def flip_board(board):
+	if PLAYER is 1:
+		new_board = [[0, 0, 0, 0, 0, 0, 0, 0] for r in range(8)]
+		for row in range(8):
+			for col in range(8):
+				new_board[row][col] = board[7-row][7-col]
+		return new_board
+	else:
+		return board
+
+
 def eval_piece(pos, board):
 	"""
 	Calculates a score based on whether a piece is attacked or defended. 
@@ -71,8 +82,13 @@ def eval_pawn(pos, board, player):
 	global PLAYER
 	PLAYER = player
 	score = CS.PAWN
-	score += pawn_weights[pos[0]][pos[1]]
-	score += eval_piece(pos, board)
+	eval_board = flip_board(board)
+	if PLAYER is 1:
+		eval_pos = (7 - pos[0], 7 - pos[1])
+	else:
+		eval_pos = pos
+	score += pawn_weights[eval_pos[0]][eval_pos[1]]
+	score += eval_piece(eval_pos, eval_board)
 	return score
 
 
@@ -80,7 +96,12 @@ def eval_rook(pos, board, player):
 	global PLAYER
 	PLAYER = player
 	score = CS.ROOK
-	score += eval_piece(pos, board)
+	eval_board = flip_board(board)
+	if PLAYER is 1:
+		eval_pos = (7 - pos[0], 7 - pos[1])
+	else:
+		eval_pos = pos
+	score += eval_piece(eval_pos, eval_board)
 	return score
 
 
@@ -88,16 +109,26 @@ def eval_knight(pos, board, player):
 	global PLAYER
 	PLAYER = player
 	score = CS.KNIGHT
-	score += knight_weights[pos[0]][pos[1]]
-	score += eval_piece(pos, board)
+	eval_board = flip_board(board)
+	if PLAYER is 1:
+		eval_pos = (7 - pos[0], 7 - pos[1])
+	else:
+		eval_pos = pos
+	score += knight_weights[eval_pos[0]][eval_pos[1]]
+	score += eval_piece(eval_pos, eval_board)
 	return score
 
 def eval_bishop(pos, board, player):
 	global PLAYER
 	PLAYER = player
 	score = CS.BISHOP
-	score += bishop_weights[pos[0]][pos[1]]
-	score += eval_piece(pos, board)
+	eval_board = flip_board(board)
+	if PLAYER is 1:
+		eval_pos = (7 - pos[0], 7 - pos[1])
+	else:
+		eval_pos = pos
+	score += bishop_weights[eval_pos[0]][eval_pos[1]]
+	score += eval_piece(eval_pos, eval_board)
 	return score
 
 
@@ -105,7 +136,12 @@ def eval_queen(pos, board, player):
 	global PLAYER
 	PLAYER = player
 	score = CS.QUEEN
-	score += eval_piece(pos, board)
+	eval_board = flip_board(board)
+	if PLAYER is 1:
+		eval_pos = (7 - pos[0], 7 - pos[1])
+	else:
+		eval_pos = pos
+	score += eval_piece(eval_pos, eval_board)
 	return score
 
 
@@ -113,8 +149,13 @@ def eval_king(pos, board, player):
 	global PLAYER
 	PLAYER = player
 	score = CS.KING
-	score += knight_weights[pos[0]][pos[1]]
-	score += eval_piece(pos, board)
+	eval_board = flip_board(board)
+	if PLAYER is 1:
+		eval_pos = (7 - pos[0], 7 - pos[1])
+	else:
+		eval_pos = pos
+	score += king_weights[eval_pos[0]][eval_pos[1]]
+	score += eval_piece(eval_pos, eval_board)
 	return score
 
 
@@ -187,8 +228,8 @@ def is_attacked(pos, board):
 			if attack_piece is not 0 and attack_piece % 2 is enemy:
 				if piece > attack_piece:
 					return -15
-				elif piece < attack_piece:
-					return -7
+				elif piece <= attack_piece:
+					return -8
 				else
 					return 0
 
