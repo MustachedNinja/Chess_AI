@@ -19,6 +19,7 @@ def initPlayersTurnsVar(curr_state):
 
 
 def make_move(current_state, current_remark, time_limit):
+    print("Trying to move player 1")
     if PLAYERS_TURN is None:
         initPlayersTurnsVar(current_state)
     MOVES.PLAYERS_TURN = PLAYERS_TURN
@@ -28,11 +29,13 @@ def make_move(current_state, current_remark, time_limit):
     move_list = MOVES.generate_moves(PLAYERS_TURN, current_state.board)
 
     try:
+        print("Generating a move")
         move = random.choice(moves_list)
         move_touple = (move[0], move[1])
         update_board((new_state, move_touple))
         return [move_touple, new_state]
     except:
+        print("Movement failed")
         pass
 
 
@@ -100,7 +103,7 @@ def generate_evaluate_moves(board):
                     MOVES.generate_knight(piece_pos, board, piece_list, PLAYERS_TURN)
                     piece_val = EVAL.eval_knight(piece_pos, board, PLAYERS_TURN)
                 if piece == MOVES.BISHOP:
-                    bishop_count++
+                    bishop_count = bishop_count + 1
                     MOVES.generate_bishop(piece_pos, board, piece_list, PLAYERS_TURN)
                     piece_val = EVAL.eval_bishop(piece_pos, board, PLAYERS_TURN)
                 if piece == MOVES.QUEEN:

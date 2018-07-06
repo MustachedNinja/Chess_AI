@@ -18,6 +18,7 @@ def initPlayersTurnsVar(curr_state):
 
 
 def make_move(current_state, current_remark, time_limit):
+    print("Trying to move player 2")
     if PLAYERS_TURN is None:
         initPlayersTurnsVar(current_state)
     MOVES.PLAYERS_TURN = PLAYERS_TURN
@@ -30,8 +31,10 @@ def make_move(current_state, current_remark, time_limit):
         move = random.choice(moves_list)
         move_touple = (move[0], move[1])
         update_board((new_state, move_touple))
+        print("Returning")
         return [move_touple, new_state]
     except:
+        print("Failed")
         pass
 
 

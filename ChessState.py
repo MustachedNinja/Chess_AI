@@ -26,7 +26,15 @@ def parse(initial_state_string):
 # ODDS = lowercase letters = Black (Player 1)
 BLACK = 1
 WHITE = 0
-BOARD_PIECES_NUMBERS = {0:'-', 
+BOARD_PIECES_NUMBERS = {'-':0, 
+'p':1 ,'P':2, 
+'h':3 ,'H':4 ,
+'b':5, 'B':6, 
+'r':7, 'R':8 , 
+'q':9, 'Q':10, 
+'k':11, 'K':12}
+
+NUMBER_TO_PIECE = {0:'-', 
 1:'p' ,2:'P', 
 3: 'h' , 4: 'H' ,
 5:'b', 6: 'B', 
@@ -70,7 +78,7 @@ class ChessState:
         s = ''
         for r in range(8):
             for c in range(8):
-                s += BOARD_PIECES_NUMBERS[self.board[r][c]] + " "
+                s += NUMBER_TO_PIECE[self.board[r][c]] + " "
             s += "\n"
         if self.whose_move == WHITE:
             s += "WHITE's move"
