@@ -14,8 +14,8 @@ a move is defined as a list of tuples [(old_pos),(new_pos)]
 PAWN = 100
 ROOK = 500
 KNIGHT = 320
-BISHOP = 325
-QUEEN = 975
+BISHOP = 330
+QUEEN = 980
 KING = 40000
 
 PLAYER = None
