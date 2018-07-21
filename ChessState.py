@@ -115,8 +115,3 @@ def test_starting_board():
 
 if __name__ == "__main__":
     test_starting_board()
-=======
-    if piece is not 0:
-        return piece % 2
-    else:
-        return -1

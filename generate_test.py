@@ -47,6 +47,43 @@ class TestMoves(unittest.TestCase):
 		for move in expected_list:
 			assert move in actual_list
 
+	def test_pawn_black_capture(self):
+		test_board = (
+		[[  0,  0,  0,  0,  0,  0,  0,  0],
+		 [  0,  0,  0,  0,  0,  0,  0,  0],
+		 [  0,  0,  0,  0,  0,  0,  0,  0],
+		 [  0,  0,101,  0,  0,  0,  0,  0],
+		 [  0,100,  0,100,  0,  0,  0,  0],
+		 [  0,  0,  0,  0,  0,  0,  0,  0],
+		 [  0,  0,  0,  0,  0,  0,  0,  0],
+		 [  0,  0,  0,  0,  0,  0,  0,  0]])
+		test_pos = (3, 2)
+
+		actual_list = []
+		MOVES.generate_pawn(test_pos, test_board, actual_list)
+		expected_list = [[(3, 2), (4, 2)], [(3, 2), (4, 1)], [(3, 2), (4, 3)]]
+
+		assert len(expected_list) is len(actual_list)
+
+		for move in expected_list:
+			assert move in actual_list
+
+	def test_bishop_black(self):
+		test_board = (
+		[[  0,  0,  0,  0,  0,  0,  0,  0],
+		 [  0,  0,  0,  0,  0,  0,  0,  0],
+		 [  0,  0,  0,  0,  0,  0,  0,  0],
+		 [  0,  0,  0,  0,  0,  0,  0,  0],
+		 [  0,  0,  0,  0,  0,  0,  0,  0],
+		 [  0,  0,  0,  0,  0,  0,  0,  0],
+		 [  0,331,  0,  0,  0,  0,  0,  0],
+		 [  0,  0,  0,  0,  0,  0,  0,  0]])
+		test_pos = (6, 1)
+
+		actual_list = []
+		MOVES.generate_bishop(test_pos, test_board, actual_list)
+		expected_list = [[(6, 1), (7, 0)], [(6, 1), (7, 2)], [(6, 1), (5, 0)], [(6, 1), (5, 2)], [(6, 1), (4, 3)], [(6, 1), (3, 5)], [(6, 1), (2, 6)], [(6, 1), (1, 7)]]
+
 	def test_pawn_simple(self):
 		test_board = (
 		[[  0,  0,  0,  0,  0,  0,  0,  0],
@@ -355,20 +392,20 @@ class TestMoves(unittest.TestCase):
 		for move in expected_list:
 			assert move in actual_list
 
-	def test_generate(self):
-		test_board = (
-		[[  0,  0,  0,  0,  0,  0,  0,  0],
-		 [  0,  0,  0,  0,  0,  0,  0,  0],
-		 [  0,  0,  0,  0,  0,  0,  0,  0],
-		 [  0,  0,  0,  0,  0,  0,  0,  0],
-		 [  0,  0,  0,  0,  0,  0,  0,  0],
-		 [  0,  0,  0,  0,  0,  0,  0,  0],
-		 [  0,  0,  0,  0,  0,  0,  0,  0],
-		 [  0,  0,  0,  0,  0,  0,  0,  0]])
+	# def test_generate(self):
+	# 	test_board = (
+	# 	[[  0,  0,  0,  0,  0,  0,  0,  0],
+	# 	 [  0,  0,  0,  0,  0,  0,  0,  0],
+	# 	 [  0,  0,  0,  0,  0,  0,  0,  0],
+	# 	 [  0,  0,  0,  0,  0,  0,  0,  0],
+	# 	 [  0,  0,  0,  0,  0,  0,  0,  0],
+	# 	 [  0,  0,  0,  0,  0,  0,  0,  0],
+	# 	 [  0,  0,  0,  0,  0,  0,  0,  0],
+	# 	 [  0,  0,  0,  0,  0,  0,  0,  0]])
 
-		actual_list = MOVES.generate_moves(0, test_board)
+	# 	actual_list = MOVES.generate_moves(0, test_board)
 
-		assert len(actual_list) is 0
+	# 	assert len(actual_list) is 0
 
 if __name__ == '__main__':
 	unittest.main()
