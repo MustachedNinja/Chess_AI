@@ -61,8 +61,9 @@ def who(piece):
     """
     Determines the piece's player or "color"
     :param piece: number of the piece (int)
-    :return: the player of the piece (0 or 1)
+    :return: the player of the piece (-1 for empty, 0 or 1)
     """
+<<<<<<< HEAD
     return piece % 2
 
 
@@ -112,3 +113,9 @@ def test_starting_board():
 
 if __name__ == "__main__":
     test_starting_board()
+=======
+    if piece is not 0:
+        return piece % 2
+    else:
+        return -1
+>>>>>>> Kostya_branch

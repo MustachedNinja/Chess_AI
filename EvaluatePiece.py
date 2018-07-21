@@ -49,6 +49,7 @@ king_table =
  [ 20, 30, 10,  0,  0, 10, 30, 20]]
 
 
+<<<<<<< HEAD
 def flip_board(board):
 	if PLAYER is 1:
 		new_board = [[0, 0, 0, 0, 0, 0, 0, 0] for r in range(8)]
@@ -58,6 +59,39 @@ def flip_board(board):
 		return new_board
 	else:
 		return board
+=======
+def eval_board(board, player):
+	global PLAYER
+	PLAYER = player
+
+	bishop_count = 0
+	board_count = 0
+	
+	for row in board:
+		for col in board[row]:
+			if CS.who(board[row][col]) == PLAYER:
+				piece_pos = (row, col)
+				piece = board[piece_pos[0]][piece_pos[1]]
+				piece -= (piece % 2)
+
+				if piece == MOVES.PAWN:
+					piece_val = eval_pawn(piece_pos, board)
+				if piece == MOVES.ROOK:
+					piece_val = EVAL.eval_rook(piece_pos, board)
+                if piece == MOVES.KNIGHT:
+                    piece_val = EVAL.eval_knight(piece_pos, board)
+                if piece == MOVES.BISHOP:
+                    bishop_count++
+                    piece_val = EVAL.eval_bishop(piece_pos, board)
+                if piece == MOVES.QUEEN:
+                    piece_val = EVAL.eval_queen(piece_pos, board)
+                if piece == MOVES.KING:
+                    piece_val = EVAL.eval_king(piece_pos, board)
+                board_count += piece_val
+    if bishop_count is 2:
+    	board_count += 10
+   	return board_count
+>>>>>>> Kostya_branch
 
 
 def eval_piece(pos, board):
@@ -78,9 +112,7 @@ def eval_piece(pos, board):
 	return score
 
 
-def eval_pawn(pos, board, player):
-	global PLAYER
-	PLAYER = player
+def eval_pawn(pos, board):
 	score = CS.PAWN
 	eval_board = flip_board(board)
 	if PLAYER is 1:
@@ -92,9 +124,7 @@ def eval_pawn(pos, board, player):
 	return score
 
 
-def eval_rook(pos, board, player):
-	global PLAYER
-	PLAYER = player
+def eval_rook(pos, board):
 	score = CS.ROOK
 	eval_board = flip_board(board)
 	if PLAYER is 1:
@@ -105,9 +135,7 @@ def eval_rook(pos, board, player):
 	return score
 
 
-def eval_knight(pos, board, player):
-	global PLAYER
-	PLAYER = player
+def eval_knight(pos, board):
 	score = CS.KNIGHT
 	eval_board = flip_board(board)
 	if PLAYER is 1:
@@ -118,9 +146,7 @@ def eval_knight(pos, board, player):
 	score += eval_piece(eval_pos, eval_board)
 	return score
 
-def eval_bishop(pos, board, player):
-	global PLAYER
-	PLAYER = player
+def eval_bishop(pos, board):
 	score = CS.BISHOP
 	eval_board = flip_board(board)
 	if PLAYER is 1:
@@ -132,9 +158,7 @@ def eval_bishop(pos, board, player):
 	return score
 
 
-def eval_queen(pos, board, player):
-	global PLAYER
-	PLAYER = player
+def eval_queen(pos, board):
 	score = CS.QUEEN
 	eval_board = flip_board(board)
 	if PLAYER is 1:
@@ -145,9 +169,7 @@ def eval_queen(pos, board, player):
 	return score
 
 
-def eval_king(pos, board, player):
-	global PLAYER
-	PLAYER = player
+def eval_king(pos, board):
 	score = CS.KING
 	eval_board = flip_board(board)
 	if PLAYER is 1:
@@ -180,7 +202,7 @@ def is_defended(pos, board):
 	piece = board[pos[0]][pos[1]] - PLAYER
 
 	for piece_pos in total_list:
-		if CS.legal_move(piece_pos):
+		if legal_move(piece_pos):
 
 			defend_piece = board[piece_pos[0]][piece_pos[1]]
 			defend_piece = defend_piece - defend_piece % 2
@@ -220,7 +242,7 @@ def is_attacked(pos, board):
 	piece = board[pos[0]][pos[1]] - PLAYER
 
 	for piece_pos in total_list:
-		if CS.legal_move(piece_pos):
+		if legal_move(piece_pos):
 
 			attack_piece = board[piece_pos[0]][piece_pos[1]]
 			attack_piece = attack_piece - attack_piece % 2
@@ -256,3 +278,14 @@ def directional_check(pos, board, direction, step_size, list, limit_player):
         new_pos[1] += direction[1]
         new_piece = board[new_pos[0]][new_pos[1]]
         step_size -= 1
+
+def legal_move(pos):
+    """
+    Checks if a given move is within the bounds of the board
+    :param pos: position of move as represented by a tuple [row, col]
+    :return: True or false
+    """
+    if 0 <= pos[0] < 8 and 0 <= pos[1] < 8:
+            return True
+    else:
+        return False

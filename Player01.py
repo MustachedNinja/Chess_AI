@@ -49,11 +49,9 @@ def update_board(new_state, move):
 
 
 def prepare():
-    # this is the code used to evaluate the value of the current board 
-    # and find all the possible moves from it
-    move_info = generate_evaluate_moves(current_state.board)
-    board_val = move_info[0]
-    move_list = move_info[1]
+    board_value = EVAL.eval_board(board, player)
+    move_list = MOVES.generate_moves(player, board)
+    board_value += len(move_list)
     pass
 
 
@@ -68,6 +66,7 @@ def dumb_heuristic(board):
                 elif piece % 2 == PLAYERS_TURN:
                     count += piece
     return count
+<<<<<<< HEAD
 
 
 def generate_evaluate_moves(board):
@@ -119,3 +118,5 @@ def generate_evaluate_moves(board):
 
     return_list = [board_count, move_list]
     return return_list
+=======
+>>>>>>> Kostya_branch
