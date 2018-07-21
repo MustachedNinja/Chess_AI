@@ -18,7 +18,7 @@ BISHOP = 330
 QUEEN = 980
 KING = 40000
 
-PLAYER = None
+PLAYER = 0
 
 
 def generate_moves(player, board):
@@ -31,8 +31,8 @@ def generate_moves(player, board):
     global PLAYER
     PLAYER = player
     move_list = []
-    for row in board:
-        for col in board[row]:
+    for row in range(len(board)):
+        for col in range(len(board[row])):
             if CS.who(board[row][col]) == PLAYER:
                 piece_list = find_moves_for_piece((row, col), board)
                 move_list.append(piece_list)
@@ -66,7 +66,7 @@ def find_moves_for_piece(piece_pos, board):
     return return_list
 
 
-def generate_pawn(pos, board, list, player):
+def generate_pawn(pos, board, list):
     """
     Generates all possible moves for a pawn at the given position
     :param pos: position of the pawn represented by a tuple (row, col)
@@ -79,10 +79,8 @@ def generate_pawn(pos, board, list, player):
     They can capture by moving to the top left or top right
     We are ignoring the 'En passant' rule
     """
-    global PLAYER
-    PLAYER = player
 
-    if PLAYER == 0:
+    if PLAYER == 1:
         # Try moving one space forward
         top_pos = (pos[0] + 1, pos[1])
         if legal_move(top_pos):
@@ -104,16 +102,16 @@ def generate_pawn(pos, board, list, player):
         kill_pos2 = (pos[0] + 1, pos[1] - 1)
         if legal_move(kill_pos1):
             kill_piece1 = board[kill_pos1[0]][kill_pos1[1]]
-            if kill_piece1 % 2 == 1:
+            if kill_piece2 % 2 == 0 and kill_piece2 != 0:
                 move = [pos, kill_pos1]
                 list.append(move)
         if legal_move(kill_pos2):
             kill_piece2 = board[kill_pos2[0]][kill_pos2[1]]
-            if kill_piece2 % 2 == 1:
+            if kill_piece2 % 2 == 0 and kill_piece2 != 0:
                 move = [pos, kill_pos1]
                 list.append(move)
                 
-    if PLAYER == 1:
+    if PLAYER == 0:
         # Try moving one space forward
         top_pos = (pos[0] - 1, pos[1])
         if legal_move(top_pos):
@@ -131,55 +129,45 @@ def generate_pawn(pos, board, list, player):
                 list.append(move)
         
         # Check all the kill moves for Black pawns
-        kill_pos1 = (pos[0] + 1, pos[1] + 1)
-        kill_pos2 = (pos[0] + 1, pos[1] - 1)
+        kill_pos1 = (pos[0] - 1, pos[1] + 1)
+        kill_pos2 = (pos[0] - 1, pos[1] - 1)
         if legal_move(kill_pos1):
             kill_piece1 = board[kill_pos1[0]][kill_pos1[1]]
-            if kill_piece1 % 2 == 0 and kill_piece1 != 0:
+            if kill_piece1 % 2 == 1:
                 move = [pos, kill_pos1]
                 list.append(move)
         if legal_move(kill_pos2):
             kill_piece2 = board[kill_pos2[0]][kill_pos2[1]]
-            if kill_piece2 % 2 == 0 and kill_piece2 != 0:
-                move = [pos, kill_pos1]
+            if kill_piece2 % 2 == 1:
+                move = [pos, kill_pos2]
                 list.append(move)
 
 
-def generate_knight(pos, board, list, player):
-    global PLAYER
-    PLAYER = player
+def generate_knight(pos, board, list):
     directions = [(1, 2), (-1, 2), (1, -2), (-1, -2), (2, 1), (-2, 1), (2, -1), (-2, -1)]
     for direction in directions:
         directional_moves(pos, board, direction, 1, list)
 
 
-def generate_king(pos, board, list, player):
-    global PLAYER
-    PLAYER = player
+def generate_king(pos, board, list):
     directions = [(1, 1), (-1, -1), (1, -1), (-1, 1), (1, 0), (-1, 0), (0, 1), (0, -1)]
     for direction in directions:
         directional_moves(pos, board, direction, 1, list)
 
 
-def generate_rook(pos, board, list, player):
-    global PLAYER
-    PLAYER = player
+def generate_rook(pos, board, list):
     directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]
     for direction in directions:
         directional_moves(pos, board, direction, 8, list)
 
 
-def generate_bishop(pos, board, list, player):
-    global PLAYER
-    PLAYER = player
+def generate_bishop(pos, board, list):
     directions = [(1, 1), (-1, -1), (1, -1), (-1, 1)]
     for direction in directions:
         directional_moves(pos, board, direction, 8, list)
 
 
-def generate_queen(pos, board, list, player):
-    global PLAYER
-    PLAYER = player
+def generate_queen(pos, board, list):
     directions = [(1, 1), (-1, -1), (1, -1), (-1, 1), (1, 0), (-1, 0), (0, 1), (0, -1)]
     for direction in directions:
         directional_moves(pos, board, direction, 8, list)
@@ -196,7 +184,9 @@ def directional_moves(pos, board, direction, step_size,  list):
     :return: none
     """
     new_pos = (pos[0] + direction[0], pos[1] + direction[1])
-    new_piece = board[new_pos[0]][[new_pos[1]]]
+    if not legal_move(new_pos):
+        return
+    new_piece = board[new_pos[0]][new_pos[1]]
     found_enemy = False
     while legal_move(new_pos) and (new_piece == 0 or new_piece % 2 != PLAYER) and step_size != 0:
         if new_piece % 2 != PLAYER and new_piece != 0:
@@ -205,8 +195,9 @@ def directional_moves(pos, board, direction, step_size,  list):
         list.append(move)
         if found_enemy:
             break
-        new_pos[0] += direction[0]
-        new_pos[1] += direction[1]
+        new_pos = (new_pos[0] + direction[0], new_pos[1] + direction[1])
+        if not legal_move(new_pos):
+            break
         new_piece = board[new_pos[0]][new_pos[1]]
         step_size -= 1
 
