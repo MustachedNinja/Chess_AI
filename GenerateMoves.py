@@ -18,7 +18,7 @@ BISHOP = 330
 QUEEN = 980
 KING = 40000
 
-PLAYER = 0
+PLAYER = 1
 
 
 def generate_moves(player, board):

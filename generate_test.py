@@ -6,6 +6,47 @@ class TestMoves(unittest.TestCase):
 	def setUp(self):
 		pass
 
+	def test_pawn_black(self):
+		test_board = (
+		[[  0,  0,  0,  0,  0,  0,  0,  0],
+		 [101,  0,  0,  0,  0,  0,  0,  0],
+		 [  0,  0,  0,  0,  0,  0,  0,  0],
+		 [  0,  0,  0,  0,  0,  0,  0,  0],
+		 [  0,  0,  0,  0,  0,  0,  0,  0],
+		 [  0,  0,  0,  0,  0,  0,  0,  0],
+		 [  0,  0,  0,  0,  0,  0,  0,  0],
+		 [  0,  0,  0,  0,  0,  0,  0,  0]])
+		test_pos = (1, 0)
+
+		actual_list = []
+		MOVES.generate_pawn(test_pos, test_board, actual_list)
+		expected_list = [[(1, 0), (2, 0)], [(1, 0), (3, 0)]]
+
+		assert len(expected_list) is len(actual_list)
+
+		for move in expected_list:
+			assert move in actual_list
+
+		test_board = (
+		[[  0,  0,  0,  0,  0,  0,  0,  0],
+		 [  0,  0,  0,  0,  0,  0,  0,  0],
+		 [101,  0,  0,  0,  0,  0,  0,  0],
+		 [  0,  0,  0,  0,  0,  0,  0,  0],
+		 [  0,  0,  0,  0,  0,  0,  0,  0],
+		 [  0,  0,  0,  0,  0,  0,  0,  0],
+		 [  0,  0,  0,  0,  0,  0,  0,  0],
+		 [  0,  0,  0,  0,  0,  0,  0,  0]])
+		test_pos = (2, 0)
+
+		actual_list = []
+		MOVES.generate_pawn(test_pos, test_board, actual_list)
+		expected_list = [[(2, 0), (3, 0)]]
+
+		assert len(expected_list) is len(actual_list)
+
+		for move in expected_list:
+			assert move in actual_list
+
 	def test_pawn_simple(self):
 		test_board = (
 		[[  0,  0,  0,  0,  0,  0,  0,  0],
