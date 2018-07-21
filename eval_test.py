@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 	test_board = 
 	[[ 0,  0,  0,  0,  0,  0,  0,  0],
 	 [ 0,  0,  0,  0,  0,  0,  0,  0],
@@ -8,6 +9,8 @@
 	 [ 0,  0,  0,  0,  0,  0,  0,  0],
 	 [ 0,  0,  0,  0,  0,  0,  0,  0]]
 
+=======
+>>>>>>> Kostya_branch
 import EvaluatePiece as EVAL
 import unittest
 
