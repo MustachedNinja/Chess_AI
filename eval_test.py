@@ -1,16 +1,3 @@
-<<<<<<< HEAD
-	test_board = 
-	[[ 0,  0,  0,  0,  0,  0,  0,  0],
-	 [ 0,  0,  0,  0,  0,  0,  0,  0],
-	 [ 0,  0,  0,  0,  0,  0,  0,  0],
-	 [ 0,  0,  0,  0,  0,  0,  0,  0],
-	 [ 0,  0,  0,  0,  0,  0,  0,  0],
-	 [ 0,  0,  0,  0,  0,  0,  0,  0],
-	 [ 0,  0,  0,  0,  0,  0,  0,  0],
-	 [ 0,  0,  0,  0,  0,  0,  0,  0]]
-
-=======
->>>>>>> Kostya_branch
 import EvaluatePiece as EVAL
 import unittest
 
@@ -18,8 +5,8 @@ class TestEval(unittest.TestCase):
 	def setUp(self):
 		pass
 
-	def test_isdefended_simple():
-		test_board = 
+	def test_isdefended_simple(self):
+		test_board = (
 		[[ 0,  0,  0,  0,  0,  0,  0,  0],
 		 [ 0,  0,  0,  0,  0,  0,  0,  0],
 		 [ 0,  0,  0,  0,  0,  0,  0,  0],
@@ -27,12 +14,15 @@ class TestEval(unittest.TestCase):
 		 [ 0,  0,  0,100,  0,  0,  0,  0],
 		 [ 0,  0,  0,  0,  0,  0,  0,  0],
 		 [ 0,  0,  0,  0,  0,330,  0,  0],
-		 [ 0,  0,  0,  0,  0,  0,  0,  0]]
+		 [ 0,  0,  0,  0,  0,  0,  0,  0]])
 		test_pos = (4, 3)
 
-		assert EVAL.is_defended(test_pos, test_board) == 7
+		result = EVAL.is_defended(test_pos, test_board)
+		print(result)
 
-		test_board = 
+		assert result == 7
+
+		test_board = (
 		[[ 0,  0,  0,  0,  0,  0,  0,  0],
 		 [ 0,  0,  0,  0,  0,  0,  0,  0],
 		 [ 0,  0,  0,  0,  0,  0,  0,  0],
@@ -40,11 +30,11 @@ class TestEval(unittest.TestCase):
 		 [ 0,  0,  0,330,  0,  0,  0,  0],
 		 [ 0,  0,  0,  0,100,  0,  0,  0],
 		 [ 0,  0,  0,  0,  0,  0,  0,  0],
-		 [ 0,  0,  0,  0,  0,  0,  0,  0]]
+		 [ 0,  0,  0,  0,  0,  0,  0,  0]])
 
 		assert EVAL.is_defended(test_pos, test_board) == 15
 
-		test_board = 
+		test_board = (
 		[[ 0,  0,  0,  0,  0,  0,  0,  0],
 		 [ 0,  0,  0,  0,  0,  0,  0,  0],
 		 [ 0,  0,  0,  0,  0,  0,  0,  0],
@@ -52,12 +42,12 @@ class TestEval(unittest.TestCase):
 		 [ 0,  0,  0,100,  0,  0,  0,  0],
 		 [ 0,  0,  0,  0,100,  0,  0,  0],
 		 [ 0,  0,  0,  0,  0,  0,  0,  0],
-		 [ 0,  0,  0,  0,  0,  0,  0,  0]]
+		 [ 0,  0,  0,  0,  0,  0,  0,  0]])
 
-		assert EVAL.is_defended(test_pos, test_board) == 0
+		assert EVAL.is_defended(test_pos, test_board) == 7
 
-	def test_isattacked_simple():
-		test_board = 
+	def test_isattacked_simple(self):
+		test_board = (
 		[[ 0,  0,  0,  0,  0,  0,  0,  0],
 		 [ 0,  0,  0,  0,  0,  0,  0,  0],
 		 [ 0,331,  0,  0,  0,  0,  0,  0],
@@ -65,12 +55,12 @@ class TestEval(unittest.TestCase):
 		 [ 0,  0,  0,100,  0,  0,  0,  0],
 		 [ 0,  0,  0,  0,  0,  0,  0,  0],
 		 [ 0,  0,  0,  0,  0,  0,  0,  0],
-		 [ 0,  0,  0,  0,  0,  0,  0,  0]]
+		 [ 0,  0,  0,  0,  0,  0,  0,  0]])
 		test_pos = (4, 3)
 
 		assert EVAL.is_attacked(test_pos, test_board) == -8
 
-		test_board = 
+		test_board = (
 		[[ 0,  0,  0,  0,  0,  0,  0,  0],
 		 [ 0,  0,  0,  0,  0,  0,  0,  0],
 		 [ 0,  0,  0,  0,  0,  0,  0,  0],
@@ -78,11 +68,11 @@ class TestEval(unittest.TestCase):
 		 [ 0,  0,  0,330,  0,  0,  0,  0],
 		 [ 0,  0,  0,  0,  0,  0,  0,  0],
 		 [ 0,  0,  0,  0,  0,  0,  0,  0],
-		 [ 0,  0,  0,  0,  0,  0,  0,  0]]
+		 [ 0,  0,  0,  0,  0,  0,  0,  0]])
 
 		assert EVAL.is_attacked(test_pos, test_board) == -15
 
-		test_board = 
+		test_board = (
 		[[ 0,  0,  0,  0,  0,  0,  0,  0],
 		 [ 0,  0,  0,  0,  0,  0,  0,  0],
 		 [ 0,  0,  0,  0,  0,  0,  0,  0],
@@ -90,11 +80,11 @@ class TestEval(unittest.TestCase):
 		 [ 0,  0,  0,100,  0,  0,  0,  0],
 		 [ 0,  0,  0,  0,  0,  0,  0,  0],
 		 [ 0,  0,  0,  0,  0,  0,  0,  0],
-		 [ 0,  0,  0,  0,  0,  0,  0,  0]]
+		 [ 0,  0,  0,  0,  0,  0,  0,  0]])
 
 		assert EVAL.is_attacked(test_pos, test_board) == -8
 
-		test_board = 
+		test_board = (
 		[[ 0,  0,  0,  0,  0,  0,  0,  0],
 		 [ 0,  0,  0,  0,  0,  0,  0,  0],
 		 [ 0,  0,  0,  0,  0,  0,  0,  0],
@@ -102,12 +92,12 @@ class TestEval(unittest.TestCase):
 		 [ 0,  0,  0,100,  0,  0,  0,  0],
 		 [ 0,  0,  0,  0,  0,  0,  0,  0],
 		 [ 0,  0,  0,  0,  0,  0,  0,  0],
-		 [ 0,  0,  0,  0,  0,  0,  0,  0]]
+		 [ 0,  0,  0,  0,  0,  0,  0,  0]])
 
-		assert EVAL.is_attacked(test_pos, test_board) == 0
+		assert EVAL.is_attacked(test_pos, test_board) == -8
 
-	def test_evalpiece_simple():
-		test_board = 
+	def test_evalpiece_simple(self):
+		test_board = (
 		[[ 0,  0,  0,  0,  0,  0,  0,  0],
 		 [ 0,  0,  0,  0,  0,  0,  0,  0],
 		 [ 0,  0,101,  0,  0,  0,  0,  0],
@@ -115,13 +105,13 @@ class TestEval(unittest.TestCase):
 		 [ 0,  0,  0,  0,  0,  0,  0,  0],
 		 [ 0,  0,  0,  0,  0,  0,  0,  0],
 		 [ 0,  0,  0,  0,  0,  0,  0,  0],
-		 [ 0,  0,  0,  0,  0,  0,  0,  0]]
+		 [ 0,  0,  0,  0,  0,  0,  0,  0]])
 		test_pos = (3, 3)
 
 		assert EVAL.eval_piece(test_pos, test_board) == -16
 
 
-		test_board = 
+		test_board = (
 		[[ 0,  0,  0,  0,  0,  0,  0,  0],
 		 [ 0,  0,  0,  0,  0,  0,  0,  0],
 		 [ 0,  0,101,  0,  0,  0,  0,  0],
@@ -129,11 +119,11 @@ class TestEval(unittest.TestCase):
 		 [ 0,  0,  0,  0,  0,  0,  0,  0],
 		 [ 0,  0,  0,  0,  0,330,  0,  0],
 		 [ 0,  0,  0,  0,  0,  0,  0,  0],
-		 [ 0,  0,  0,  0,  0,  0,  0,  0]]
+		 [ 0,  0,  0,  0,  0,  0,  0,  0]])
 
 		assert EVAL.eval_piece(test_pos, test_board) == -1
 
-		test_board = 
+		test_board = (
 		[[ 0,  0,  0,  0,  0,  0,  0,  0],
 		 [ 0,  0,  0,  0,  0,  0,  0,  0],
 		 [ 0,  0,101,  0,  0,  0,  0,  0],
@@ -141,7 +131,7 @@ class TestEval(unittest.TestCase):
 		 [ 0,  0,  0,  0,  0,  0,  0,  0],
 		 [ 0,  0,  0,  0,  0,331,  0,  0],
 		 [ 0,  0,  0,  0,  0,  0,  0,  0],
-		 [ 0,  0,  0,  0,  0,  0,  0,  0]]
+		 [ 0,  0,  0,  0,  0,  0,  0,  0]])
 
 		assert EVAL.eval_piece(test_pos, test_board) == -16
 

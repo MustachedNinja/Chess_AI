@@ -8,7 +8,7 @@ import GenerateMoves as MOVES
 PLAYER = 0
 
 
-pawn_weights =   
+pawn_weights = (
 [[ 0,  0,  0,  0,  0,  0,  0,  0],
  [50, 50, 50, 50, 50, 50, 50, 50],
  [10, 10, 20, 30, 30, 20, 10, 10],
@@ -16,9 +16,9 @@ pawn_weights =
  [ 0,  0,  0, 25, 25,  0,  0,  0],
  [ 5, -5,-10,  0,  0,-10, -5,  5],
  [ 5, 10, 10,-25,-25, 10, 10,  5],
- [ 0,  0,  0,  0,  0,  0,  0,  0]]
+ [ 0,  0,  0,  0,  0,  0,  0,  0]])
 
-knight_weights =
+knight_weights = (
 [[-50,-40,-30,-30,-30,-30,-40,-50],
  [-40,-20,  0,  0,  0,  0,-20,-40],
  [-30,  0, 10, 15, 15, 10,  0,-30],
@@ -26,9 +26,9 @@ knight_weights =
  [-30,  0, 15, 20, 20, 15,  0,-30],
  [-30,  5, 10, 15, 15, 10,  5,-30],
  [-40,-20,  0,  5,  5,  0,-20,-40],
- [-50,-40,-20,-30,-30,-20,-40,-50]]
+ [-50,-40,-20,-30,-30,-20,-40,-50]])
 
-bishop_weights = 
+bishop_weights = ( 
 [[-20,-10,-10,-10,-10,-10,-10,-20],
  [-10,  0,  0,  0,  0,  0,  0,-10],
  [-10,  0,  5, 10, 10,  5,  0,-10],
@@ -36,9 +36,9 @@ bishop_weights =
  [-10,  0, 10, 10, 10, 10,  0,-10],
  [-10, 10, 10, 10, 10, 10, 10,-10],
  [-10,  5,  0,  0,  0,  0,  5,-10],
- [-20,-10,-40,-10,-10,-40,-10,-20]]
+ [-20,-10,-40,-10,-10,-40,-10,-20]])
 
-king_table = 
+king_table = (
 [[-30,-40,-40,-50,-50,-40,-40,-30],
  [-30,-40,-40,-50,-50,-40,-40,-30],
  [-30,-40,-40,-50,-50,-40,-40,-30],
@@ -46,10 +46,8 @@ king_table =
  [-20,-30,-30,-40,-40,-30,-30,-20],
  [-10,-20,-20,-20,-20,-20,-20,-10], 
  [ 20, 20,  0,  0,  0,  0, 20, 20],
- [ 20, 30, 10,  0,  0, 10, 30, 20]]
+ [ 20, 30, 10,  0,  0, 10, 30, 20]])
 
-
-<<<<<<< HEAD
 def flip_board(board):
 	if PLAYER is 1:
 		new_board = [[0, 0, 0, 0, 0, 0, 0, 0] for r in range(8)]
@@ -59,7 +57,7 @@ def flip_board(board):
 		return new_board
 	else:
 		return board
-=======
+
 def eval_board(board, player):
 	global PLAYER
 	PLAYER = player
@@ -76,22 +74,21 @@ def eval_board(board, player):
 
 				if piece == MOVES.PAWN:
 					piece_val = eval_pawn(piece_pos, board)
-				if piece == MOVES.ROOK:
+				elif piece == MOVES.ROOK:
 					piece_val = EVAL.eval_rook(piece_pos, board)
-                if piece == MOVES.KNIGHT:
-                    piece_val = EVAL.eval_knight(piece_pos, board)
-                if piece == MOVES.BISHOP:
-                    bishop_count++
-                    piece_val = EVAL.eval_bishop(piece_pos, board)
-                if piece == MOVES.QUEEN:
-                    piece_val = EVAL.eval_queen(piece_pos, board)
-                if piece == MOVES.KING:
-                    piece_val = EVAL.eval_king(piece_pos, board)
-                board_count += piece_val
-    if bishop_count is 2:
-    	board_count += 10
-   	return board_count
->>>>>>> Kostya_branch
+				elif piece == MOVES.KNIGHT:
+					piece_val = EVAL.eval_knight(piece_pos, board)
+				elif piece == MOVES.BISHOP:
+					bishop_count += 1
+					piece_val = EVAL.eval_bishop(piece_pos, board)
+				elif piece == MOVES.QUEEN:
+					piece_val = EVAL.eval_queen(piece_pos, board)
+				elif piece == MOVES.KING:
+					piece_val = EVAL.eval_king(piece_pos, board)
+				board_count += piece_val
+	if bishop_count is 2:
+		board_count += 10
+	return board_count
 
 
 def eval_piece(pos, board):
@@ -195,8 +192,8 @@ def is_defended(pos, board):
 	knight_pos = [(1, 2), (-1, 2), (1, -2), (-1, -2), (2, 1), (-2, 1), (2, -1), (-2, -1)]
 	
 	total_list = []
-	total_list.append(relative_pos)
-	total_list.append(knight_pos)
+	total_list = total_list + relative_pos
+	total_list = total_list + knight_pos
 	queen_check(pos, board, total_list, PLAYER)
 
 	piece = board[pos[0]][pos[1]] - PLAYER
@@ -210,10 +207,9 @@ def is_defended(pos, board):
 			if defend_piece is not 0 and defend_piece % 2 is PLAYER:
 				if piece > defend_piece:
 					return 15
-				elif piece < defend_piece:
+				else:
 					return 7
-				else
-					return 0
+	return 0
 
 
 def is_attacked(pos, board):
@@ -229,8 +225,8 @@ def is_attacked(pos, board):
 	knight_pos = [(1, 2), (-1, 2), (1, -2), (-1, -2), (2, 1), (-2, 1), (2, -1), (-2, -1)]
 	
 	total_list = []
-	total_list.append(relative_pos)
-	total_list.append(knight_pos)
+	total_list = total_list + relative_pos
+	total_list = total_list + knight_pos
 
 	if PLAYER is 1:
 		enemy = 0
@@ -250,42 +246,43 @@ def is_attacked(pos, board):
 			if attack_piece is not 0 and attack_piece % 2 is enemy:
 				if piece > attack_piece:
 					return -15
-				elif piece <= attack_piece:
+				else:
 					return -8
-				else
-					return 0
+	return 0
 
 
-def queen_check(pos, board, list, limit_player):
-    directions = [(1, 1), (-1, -1), (1, -1), (-1, 1), (1, 0), (-1, 0), (0, 1), (0, -1)]
-    
-    for direction in directions:
-        directional_check(pos, board, direction, 8, list, limit_player)
+def queen_check(pos, board, list_var, limit_player):
+	directions = [(1, 1), (-1, -1), (1, -1), (-1, 1), (1, 0), (-1, 0), (0, 1), (0, -1)]
+	
+	for direction in directions:
+		directional_check(pos, board, direction, 8, list_var, limit_player)
 
 
-def directional_check(pos, board, direction, step_size, list, limit_player):
-    
-    new_pos = (pos[0] + direction[0], pos[1] + direction[1])
-    new_piece = board[new_pos[0]][[new_pos[1]]]
-    
-    while legal_move(new_pos) and (new_piece == 0 or new_piece % 2 != limit_player) and step_size != 0:
-        
-        if new_piece % 2 == limit_player and new_piece != 0:
-        	list.append(new_pos)
-        	break
-        
-        new_pos[0] += direction[0]
-        new_pos[1] += direction[1]
-        new_piece = board[new_pos[0]][new_pos[1]]
-        step_size -= 1
+def directional_check(pos, board, direction, step_size, list_var, limit_player):
+	
+	new_pos = (pos[0] + direction[0], pos[1] + direction[1])
+	if not legal_move(new_pos):
+		return
+	new_piece = board[new_pos[0]][new_pos[1]]
+	
+	while legal_move(new_pos) and (new_piece == 0 or new_piece % 2 != limit_player) and step_size != 0:
+		if new_piece % 2 == limit_player and new_piece != 0:
+			list_var.append(new_pos)
+			break
+		
+		new_pos = (new_pos[0] + direction[0], new_pos[1] + direction[1])
+		if not legal_move(new_pos):
+			return
+		new_piece = board[new_pos[0]][new_pos[1]]
+		step_size -= 1
 
 def legal_move(pos):
-    """
-    Checks if a given move is within the bounds of the board
-    :param pos: position of move as represented by a tuple [row, col]
-    :return: True or false
-    """
-    if 0 <= pos[0] < 8 and 0 <= pos[1] < 8:
-            return True
-    else:
-        return False
+	"""
+	Checks if a given move is within the bounds of the board
+	:param pos: position of move as represented by a tuple [row, col]
+	:return: True or false
+	"""
+	if 0 <= pos[0] < 8 and 0 <= pos[1] < 8:
+			return True
+	else:
+		return False
