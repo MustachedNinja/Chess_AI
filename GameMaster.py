@@ -64,7 +64,7 @@ def run_game():
     print(str(current_state))
 
     try:
-        p1comment = player1.prepare(player2.nickname())
+        p1comment = player1.prepare()
     except:
         report = 'Player 1 failed to prepare, and loses by default.'
         print(report)
@@ -72,7 +72,7 @@ def run_game():
         print(report)
         return
     try:
-        p2comment = player2.prepare(player1.nickname())
+        p2comment = player2.prepare()
     except:
         report = 'Player 2 failed to prepare, and loses by default.'
         print(report)

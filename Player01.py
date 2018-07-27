@@ -66,7 +66,6 @@ def dumb_heuristic(board):
                 elif piece % 2 == PLAYERS_TURN:
                     count += piece
     return count
-<<<<<<< HEAD
 
 
 def generate_evaluate_moves(board):
@@ -118,5 +117,3 @@ def generate_evaluate_moves(board):
 
     return_list = [board_count, move_list]
     return return_list
-=======
->>>>>>> Kostya_branch
