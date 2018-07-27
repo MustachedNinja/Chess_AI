@@ -8,8 +8,7 @@ import GenerateMoves as MOVES
 PLAYER = 0
 
 
-pawn_weights =   
-[[ 0,  0,  0,  0,  0,  0,  0,  0],
+pawn_weights =   [[ 0,  0,  0,  0,  0,  0,  0,  0],
  [50, 50, 50, 50, 50, 50, 50, 50],
  [10, 10, 20, 30, 30, 20, 10, 10],
  [ 5,  5, 10, 27, 27, 10,  5,  5],
@@ -18,8 +17,7 @@ pawn_weights =
  [ 5, 10, 10,-25,-25, 10, 10,  5],
  [ 0,  0,  0,  0,  0,  0,  0,  0]]
 
-knight_weights =
-[[-50,-40,-30,-30,-30,-30,-40,-50],
+knight_weights =	[[-50,-40,-30,-30,-30,-30,-40,-50],
  [-40,-20,  0,  0,  0,  0,-20,-40],
  [-30,  0, 10, 15, 15, 10,  0,-30],
  [-30,  5, 15, 20, 20, 15,  5,-30],
@@ -28,8 +26,7 @@ knight_weights =
  [-40,-20,  0,  5,  5,  0,-20,-40],
  [-50,-40,-20,-30,-30,-20,-40,-50]]
 
-bishop_weights = 
-[[-20,-10,-10,-10,-10,-10,-10,-20],
+bishop_weights = 	[[-20,-10,-10,-10,-10,-10,-10,-20],
  [-10,  0,  0,  0,  0,  0,  0,-10],
  [-10,  0,  5, 10, 10,  5,  0,-10],
  [-10,  5,  5, 10, 10,  5,  5,-10],
@@ -38,8 +35,7 @@ bishop_weights =
  [-10,  5,  0,  0,  0,  0,  5,-10],
  [-20,-10,-40,-10,-10,-40,-10,-20]]
 
-king_table = 
-[[-30,-40,-40,-50,-50,-40,-40,-30],
+king_table = 	[[-30,-40,-40,-50,-50,-40,-40,-30],
  [-30,-40,-40,-50,-50,-40,-40,-30],
  [-30,-40,-40,-50,-50,-40,-40,-30],
  [-30,-40,-40,-50,-50,-40,-40,-30],
@@ -49,7 +45,6 @@ king_table =
  [ 20, 30, 10,  0,  0, 10, 30, 20]]
 
 
-<<<<<<< HEAD
 def flip_board(board):
 	if PLAYER is 1:
 		new_board = [[0, 0, 0, 0, 0, 0, 0, 0] for r in range(8)]
@@ -59,7 +54,6 @@ def flip_board(board):
 		return new_board
 	else:
 		return board
-=======
 def eval_board(board, player):
 	global PLAYER
 	PLAYER = player
@@ -78,8 +72,8 @@ def eval_board(board, player):
 					piece_val = eval_pawn(piece_pos, board)
 				if piece == MOVES.ROOK:
 					piece_val = EVAL.eval_rook(piece_pos, board)
-                if piece == MOVES.KNIGHT:
-                    piece_val = EVAL.eval_knight(piece_pos, board)
+				if piece == MOVES.KNIGHT:
+					piece_val = EVAL.eval_knight(piece_pos, board)
                 if piece == MOVES.BISHOP:
                     bishop_count++
                     piece_val = EVAL.eval_bishop(piece_pos, board)
@@ -91,7 +85,6 @@ def eval_board(board, player):
     if bishop_count is 2:
     	board_count += 10
    	return board_count
->>>>>>> Kostya_branch
 
 
 def eval_piece(pos, board):

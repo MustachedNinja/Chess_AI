@@ -6,7 +6,7 @@ import time
 import ChessState as CS
 
 PLAY_AGAINST_MYSELF = False
-TIME_PER_MOVE = 10
+TIME_PER_MOVE = 1000
 TURN_LIMIT = 50
 
 if len(sys.argv) > 1:
@@ -62,7 +62,6 @@ FINISHED = False
 def run_game():
     current_state = CS.ChessState()
     print(str(current_state))
-
     try:
         p1comment = player1.prepare(player2.nickname())
     except:

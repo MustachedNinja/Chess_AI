@@ -37,6 +37,9 @@ def make_move(current_state, current_remark, time_limit):
         print("Failed")
         pass
 
+def nickname():
+    return "Player 2 bapbapbap!"
+
 
 def update_board(new_state, move):
     old_pos = move[0]
