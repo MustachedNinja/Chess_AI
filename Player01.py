@@ -49,9 +49,6 @@ def update_board(new_state, move):
 
 
 def prepare():
-    board_value = EVAL.eval_board(board, player)
-    move_list = MOVES.generate_moves(player, board)
-    board_value += len(move_list)
     pass
 
 
