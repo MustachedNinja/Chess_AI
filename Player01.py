@@ -18,8 +18,9 @@ def initPlayersTurnsVar(curr_state):
         PLAYERS_TURN = 1
 
 
-def make_move(current_state, current_remark, time_limit):
+def make_move(current_state):
     print("Trying to move player 1")
+
     if PLAYERS_TURN is None:
         initPlayersTurnsVar(current_state)
     MOVES.PLAYERS_TURN = PLAYERS_TURN
@@ -27,6 +28,7 @@ def make_move(current_state, current_remark, time_limit):
 
     new_state.whose_move = 1 - current_state.whose_move
     move_list = MOVES.generate_moves(PLAYERS_TURN, current_state.board)
+    print("Move list: " + str(move_list))
 
     try:
         print("Generating a move")

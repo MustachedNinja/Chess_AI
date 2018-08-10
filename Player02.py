@@ -17,7 +17,7 @@ def initPlayersTurnsVar(curr_state):
         PLAYERS_TURN = 1
 
 
-def make_move(current_state, current_remark, time_limit):
+def make_move(current_state):
     print("Trying to move player 2")
     if PLAYERS_TURN is None:
         initPlayersTurnsVar(current_state)

@@ -6,6 +6,25 @@ class TestMoves(unittest.TestCase):
 	def setUp(self):
 		pass
 
+	def test_start_pos(self):
+		"""
+		pawns aren't being generated
+		"""
+		test_board = (
+		[[  0,321,  0,  0,  0,  0,  0,  0],
+		 [101,  0,  0,  0,  0,  0,  0,  0],
+		 [  0,  0,  0,  0,  0,  0,  0,  0],
+		 [  0,  0,  0,  0,  0,  0,  0,  0],
+		 [  0,  0,  0,  0,  0,  0,  0,  0],
+		 [  0,  0,  0,  0,  0,  0,  0,  0],
+		 [  0,100,  0,  0,  0,  0,  0,  0],
+		 [  0,320,  0,  0,  0,  0,  0,  0]]
+		)
+
+		actual_list = MOVES.generate_moves(0, test_board)
+		expected_list = [[(0, 1), (2, 0)], [(0, 1), (2, 2)]]
+
+
 	def test_pawn_black(self):
 		test_board = (
 		[[  0,  0,  0,  0,  0,  0,  0,  0],

@@ -6,7 +6,7 @@ import time
 import ChessState as CS
 
 PLAY_AGAINST_MYSELF = False
-TIME_PER_MOVE = 10
+TIME_PER_MOVE = 10000
 TURN_LIMIT = 50
 
 if len(sys.argv) > 1:
@@ -102,24 +102,21 @@ def run_game():
         global CURRENT_PLAYER
         CURRENT_PLAYER = who
         if WHITEs_turn:
-            move_fn = player1.make_move
+            move_fn = player1.make_move(current_state)
         else:
-            move_fn = player2.make_move
-        player_result = timeout(move_fn, args=(current_state, current_remark, TIME_PER_MOVE), kwargs={},
-                                timeout_duration=TIME_PER_MOVE, default=(None, "I give up!"))
+            move_fn = player2.make_move(current_state)
+        # player_result = timeout(move_fn, args=(current_state, current_remark, TIME_PER_MOVE), kwargs={},
+                                # timeout_duration=TIME_PER_MOVE, default=(None, "I give up!"))
         WHITEs_turn = not WHITEs_turn
 
-        move_and_state, current_remark = player_result
+
         if move_and_state is None:
             print("No move returned by " + side + ".")
             WINNER = other_side
             FINISHED = True
             break
 
-        if current_remark == "I believe I have no legal moves.":
-            WINNER = other_side
-            FINISHED = True
-            break
+
 
         try:
             move, new_state = move_and_state

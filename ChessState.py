@@ -2,6 +2,8 @@
 Defines a state in a game of chess
 """
 
+import GenerateMoves as GM
+
 def parse(initial_state_string):
     """Translates a nice looking string version of the
     # chess board into a 2D array with integers in order to be more functional.
@@ -27,20 +29,20 @@ def parse(initial_state_string):
 BLACK = 1
 WHITE = 0
 BOARD_PIECES_NUMBERS = {'-':0, 
-'p':1 ,'P':2, 
-'h':3 ,'H':4 ,
-'b':5, 'B':6, 
-'r':7, 'R':8 , 
-'q':9, 'Q':10, 
-'k':11, 'K':12}
+'p':(GM.PAWN) ,'P':(GM.PAWN + 1), 
+'h':(GM.KNIGHT) ,'H':(GM.KNIGHT + 1) ,
+'b':(GM.BISHOP), 'B':(GM.BISHOP + 1), 
+'r':(GM.ROOK), 'R':(GM.ROOK + 1) , 
+'q':(GM.QUEEN), 'Q':(GM.QUEEN + 1), 
+'k':(GM.KING), 'K':(GM.KING + 1)}
 
 NUMBER_TO_PIECE = {0:'-', 
-1:'p' ,2:'P', 
-3: 'h' , 4: 'H' ,
-5:'b', 6: 'B', 
-7:'r', 8:'R' , 
-9: 'q', 10:'Q', 
-11:'k', 12:'K'}
+(GM.PAWN):'p' ,(GM.PAWN + 1):'P', 
+(GM.KNIGHT): 'h' , (GM.KNIGHT + 1): 'H' ,
+(GM.BISHOP):'b', (GM.BISHOP + 1): 'B', 
+(GM.ROOK):'r', (GM.ROOK + 1):'R' , 
+(GM.QUEEN): 'q', (GM.QUEEN + 1):'Q', 
+(GM.KING):'k', (GM.KING + 1):'K'}
 
 
 INITIAL_BOARD = parse (
