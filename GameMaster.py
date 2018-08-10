@@ -4,6 +4,7 @@ Runs a game of chess between two players
 import sys
 import time
 import ChessState as CS
+import GenerateMoves as MOVES
 
 PLAY_AGAINST_MYSELF = False
 TIME_PER_MOVE = 10000
@@ -42,9 +43,9 @@ def win_tester(s):
     b = s.board
     for i in range(8):
         for j in range(8):
-            if b[i][j] == CS.BLACK_KING:
+            if b[i][j] == MOVES.KING + 1:
                 black_king_detected = True
-            if b[i][j] == CS.WHITE_KING:
+            if b[i][j] == MOVES.KING:
                 white_king_detected = True
     if white_king_detected and not black_king_detected:
         possible_win = "Win for WHITE"
@@ -110,16 +111,15 @@ def run_game():
         WHITEs_turn = not WHITEs_turn
 
 
-        if move_and_state is None:
+        if move_fn is None:
             print("No move returned by " + side + ".")
             WINNER = other_side
             FINISHED = True
             break
-
-
+            
 
         try:
-            move, new_state = move_and_state
+            move, new_state = move_fn
             startsq, endsq = move
             i, j = startsq
             ii, jj = endsq
@@ -129,7 +129,7 @@ def run_game():
             WINNER = other_side
             FINISHED = True
             exit()
-        print(side + "'s move: the " + CS.CODE_TO_INIT[current_state.board[i][j]] +
+        print(side + "'s move: the " + CS.NUMBER_TO_PIECE[current_state.board[i][j]] +
               " at (" + str(i) + ", " + str(j) + ")  to (" + str(ii) + ", " + str(jj) + ".")
 
         move_report = "Turn " + str(turn_count) + ": Move is by " + side
