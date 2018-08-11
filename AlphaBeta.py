@@ -1,8 +1,9 @@
 import EvaluatePiece as EP
+import GenerateMoves as MOVES
+NUM_TIMES_PRUNED = 0
 
+# ==================== DOCUMENTATION ====================
 # old alpha beta: https://github.com/bwalchen/cse415_finalProject/blob/master/Mei_BC_Player.py
-
-
 
 
 # -------- Summary --------
@@ -18,8 +19,9 @@ import EvaluatePiece as EP
 
 
 
+# ==================== CODE ====================
 
-def runAlphaBeta(which_player_turn, current_board, max_depth):
+def runAlphaBeta(which_player_turn, curren_state, max_depth):
     """Helper method that kicks off alpha beta pruning and returns best option.
     
     :param which_player_turn: Who's turn is it.
@@ -31,11 +33,13 @@ def runAlphaBeta(which_player_turn, current_board, max_depth):
     :return: Returns best move.
     :rtype: tuple - (old position, new position)
     """
-    return (alphabeta(board, max_depth, -9999999, 9999999, True, which_player_turn))
+
+    print('-----ALPHA BETA-----')
+    return (alphabeta(curren_state, max_depth, -9999999, 9999999, True, which_player_turn))
 
 
 # def alphabeta(node, depth_left, A, B, bool_maximizingPlayer):
-def alphabeta(working_board, depth_left, A, B, bool_maximizingPlayer, player_number):
+def alphabeta(currentState, depth_left, A, B, bool_maximizingPlayer, player_number):
     """Finds the next best move to complete.
     
     :param node: oldpos, newpos, killpos
@@ -47,26 +51,31 @@ def alphabeta(working_board, depth_left, A, B, bool_maximizingPlayer, player_num
     :type bool_maximizingPlayer: boolean
     :return: heuristic, move
     """
+    
+    # base
+    if (depth_left == 0):
+        return count_heuristic(node), node
 
     # get all children moves from the given node
-    children = giveMeChildren(working_board, player_number)
-    # base
+    children = MOVES.generate_moves(player_number, currentState.board)
 
-    if (depth_left == 0) or test_win(node) is not -1:
-        return count_heuristic(node), node
+    # who's turn it'll be next
+    nextTurnPlayerNumber = 0
+    if player_number == 0:
+        nextTurnPlayerNumber = 1
+
 
     if bool_maximizingPlayer:
         v = -999999
         best_child = None
         # produce children of node
         for child in children:
-            child_state = BC.BC_state(node.board)
-            child_move = (child[0], child[1])
-            updateTheBoard(child_state, child_move, child[2])
-
+            child_state = child[1]
+            child_move = child[0]
 
             # v = max(v, alphabeta(child, depth_left - 1, A, B, False))
             returnedInformation =  alphabeta(child_state, depth_left - 1, A, B, False)
+            alphabeta(child_state, depth_left - 1, A, B, False, nextTurnPlayerNumber)
             old_v = v
             v = max(v, returnedInformation[0])
             # check if it was changed. if it was update Node
@@ -94,6 +103,7 @@ def alphabeta(working_board, depth_left, A, B, bool_maximizingPlayer, player_num
 
 
             returnedInformation = alphabeta(child_state, depth_left - 1, A, B, True)
+            # alphabeta(working_board, depth_left - 1, A, B, True, nextTurnPlayerNumber)
             old_v = v
             v = min(v, returnedInformation[0])
             # check if it was changed. if it was update best child
@@ -108,20 +118,9 @@ def alphabeta(working_board, depth_left, A, B, bool_maximizingPlayer, player_num
         # print(best_child)
         return v, best_child
 
-
-
-
-
-def giveMeChildren(board, player):
-    return EP.eval_board(board, player)
-
  
 
 
 def updatePruning():
     global NUM_TIMES_PRUNED
     NUM_TIMES_PRUNED += 1
-
-
-# [[], [[(0, 1), (2, 2)], [(0, 1), (2, 0)]], [], [], [], [], [[(0, 6), (2, 7)], [(0, 6), (2, 5)]], [], [], [], [], [], [], [], [], []]
-# [[(0, 1), (2, 2)], [(0, 1), (2, 0)]]

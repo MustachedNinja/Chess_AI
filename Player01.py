@@ -6,7 +6,11 @@ Uses information gathered from the game to comment on the game to its opponent
 import random
 import ChessState as CS
 import GenerateMoves as MOVES
+import AlphaBeta as AB
 PLAYERS_TURN = None
+
+
+import EvaluatePiece as EP
 
 
 def initPlayersTurnsVar(curr_state):
@@ -28,6 +32,20 @@ def make_move(current_state):
 
     new_state.whose_move = 1 - current_state.whose_move
     move_list = MOVES.generate_moves(PLAYERS_TURN, current_state.board)
+    
+
+
+    # [(old_pos, new_pos), new_state] 
+    best_move = AB.runAlphaBeta(PLAYERS_TURN, current_state, 1)
+    print(best_move)
+
+
+
+
+
+
+
+
     return move_list[0]
 
     try:
