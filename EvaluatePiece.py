@@ -65,8 +65,8 @@ def eval_board(board, player):
 	bishop_count = 0
 	board_count = 0
 	
-	for row in board:
-		for col in board[row]:
+	for row in range(8):
+		for col in range(8):
 			if CS.who(board[row][col]) == PLAYER:
 				piece_pos = (row, col)
 				piece = board[piece_pos[0]][piece_pos[1]]
