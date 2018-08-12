@@ -18,8 +18,10 @@ def initPlayersTurnsVar(curr_state):
 
     if curr_state.whose_move == 0:
         PLAYERS_TURN = 0
+        print('Setting PLAYERS TURN TO ---- ' ,PLAYERS_TURN)
     else:
         PLAYERS_TURN = 1
+        print('Setting PLAYERS TURN TO ---- ' ,PLAYERS_TURN)
 
 
 def make_move(current_state):

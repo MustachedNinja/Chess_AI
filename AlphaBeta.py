@@ -76,6 +76,7 @@ def alphabeta(currentState, depth_left, A, B, bool_maximizingPlayer, player_numb
             returnedInformation = alphabeta(child_state, depth_left - 1, A, B, False, nextTurnPlayerNumber)
             old_v = v
             v = max(v, returnedInformation)
+            print(v)
             # check if it was changed. if it was update Node
             if v is not old_v:
                 # best_child = returnedInformation[1]
@@ -103,6 +104,7 @@ def alphabeta(currentState, depth_left, A, B, bool_maximizingPlayer, player_numb
             # alphabeta(working_board, depth_left - 1, A, B, True, nextTurnPlayerNumber)
             old_v = v
             v = min(v, returnedInformation)
+            print(v)
             # check if it was changed. if it was update best child
             if v is not old_v:
                 # best_child = returnedInformation[1]
