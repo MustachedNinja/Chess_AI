@@ -35,17 +35,20 @@ def make_move(current_state):
     
 
     # [(old_pos, new_pos), new_state] 
+
+    print('Calling ALPHA BETA')
+
     best_move = AB.runAlphaBeta(PLAYERS_TURN, current_state, 1)
-    print(best_move)
+
+    # print('hey check for correct form')
+    # print(best_move[1])
 
 
 
 
 
 
-
-
-    return move_list[0]
+    return best_move[1]
 
     try:
         print("Generating a move")

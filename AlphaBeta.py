@@ -34,7 +34,6 @@ def runAlphaBeta(which_player_turn, curren_state, max_depth):
     :rtype: tuple - (old position, new position)
     """
 
-    print('-----ALPHA BETA-----')
     return (alphabeta(curren_state, max_depth, -9999999, 9999999, True, which_player_turn))
 
 
