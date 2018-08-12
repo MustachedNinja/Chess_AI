@@ -52,9 +52,9 @@ def alphabeta(currentState, depth_left, A, B, bool_maximizingPlayer, player_numb
     :return: heuristic, move
     """
     
-    # base
+    # base: no more tree discovering. Return the heuristic score for the given board state
     if (depth_left == 0):
-        return count_heuristic(node), node
+        return EP.eval_board(currentState.board, player_number)
 
     # get all children moves from the given node
     children = MOVES.generate_moves(player_number, currentState.board)
@@ -74,10 +74,9 @@ def alphabeta(currentState, depth_left, A, B, bool_maximizingPlayer, player_numb
             child_move = child[0]
 
             # v = max(v, alphabeta(child, depth_left - 1, A, B, False))
-            returnedInformation =  alphabeta(child_state, depth_left - 1, A, B, False)
-            alphabeta(child_state, depth_left - 1, A, B, False, nextTurnPlayerNumber)
+            returnedInformation = alphabeta(child_state, depth_left - 1, A, B, False, nextTurnPlayerNumber)
             old_v = v
-            v = max(v, returnedInformation[0])
+            v = max(v, returnedInformation)
             # check if it was changed. if it was update Node
             if v is not old_v:
                 # best_child = returnedInformation[1]
@@ -97,15 +96,14 @@ def alphabeta(currentState, depth_left, A, B, bool_maximizingPlayer, player_numb
         for child in children:
             # v = min(v, alphabeta(child, depth_left - 1, A, B, True))
 
-            child_state = BC.BC_state(node.board)
-            child_move = (child[0], child[1])
-            updateTheBoard(child_state, child_move, child[2])
+            child_state = child[1]
+            child_move = child[0]
 
 
-            returnedInformation = alphabeta(child_state, depth_left - 1, A, B, True)
+            returnedInformation = alphabeta(child_state, depth_left - 1, A, B, True, nextTurnPlayerNumber)
             # alphabeta(working_board, depth_left - 1, A, B, True, nextTurnPlayerNumber)
             old_v = v
-            v = min(v, returnedInformation[0])
+            v = min(v, returnedInformation)
             # check if it was changed. if it was update best child
             if v is not old_v:
                 # best_child = returnedInformation[1]

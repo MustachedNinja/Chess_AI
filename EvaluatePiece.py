@@ -65,8 +65,8 @@ def eval_board(board, player):
 	bishop_count = 0
 	board_count = 0
 	
-	for row in board:
-		for col in board[row]:
+	for row in range(8):
+		for col in range(8):
 			if CS.who(board[row][col]) == PLAYER:
 				piece_pos = (row, col)
 				piece = board[piece_pos[0]][piece_pos[1]]
@@ -75,16 +75,16 @@ def eval_board(board, player):
 				if piece == MOVES.PAWN:
 					piece_val = eval_pawn(piece_pos, board)
 				elif piece == MOVES.ROOK:
-					piece_val = EVAL.eval_rook(piece_pos, board)
+					piece_val = eval_rook(piece_pos, board)
 				elif piece == MOVES.KNIGHT:
-					piece_val = EVAL.eval_knight(piece_pos, board)
+					piece_val = eval_knight(piece_pos, board)
 				elif piece == MOVES.BISHOP:
 					bishop_count += 1
-					piece_val = EVAL.eval_bishop(piece_pos, board)
+					piece_val = eval_bishop(piece_pos, board)
 				elif piece == MOVES.QUEEN:
-					piece_val = EVAL.eval_queen(piece_pos, board)
+					piece_val = eval_queen(piece_pos, board)
 				elif piece == MOVES.KING:
-					piece_val = EVAL.eval_king(piece_pos, board)
+					piece_val = eval_king(piece_pos, board)
 				board_count += piece_val
 	if bishop_count is 2:
 		board_count += 10
@@ -110,7 +110,7 @@ def eval_piece(pos, board):
 
 
 def eval_pawn(pos, board):
-	score = CS.PAWN
+	score = MOVES.PAWN
 	eval_board = flip_board(board)
 	if PLAYER is 1:
 		eval_pos = (7 - pos[0], 7 - pos[1])
@@ -122,7 +122,7 @@ def eval_pawn(pos, board):
 
 
 def eval_rook(pos, board):
-	score = CS.ROOK
+	score = MOVES.ROOK
 	eval_board = flip_board(board)
 	if PLAYER is 1:
 		eval_pos = (7 - pos[0], 7 - pos[1])
@@ -133,7 +133,7 @@ def eval_rook(pos, board):
 
 
 def eval_knight(pos, board):
-	score = CS.KNIGHT
+	score = MOVES.KNIGHT
 	eval_board = flip_board(board)
 	if PLAYER is 1:
 		eval_pos = (7 - pos[0], 7 - pos[1])
@@ -144,7 +144,7 @@ def eval_knight(pos, board):
 	return score
 
 def eval_bishop(pos, board):
-	score = CS.BISHOP
+	score = MOVES.BISHOP
 	eval_board = flip_board(board)
 	if PLAYER is 1:
 		eval_pos = (7 - pos[0], 7 - pos[1])
@@ -156,7 +156,7 @@ def eval_bishop(pos, board):
 
 
 def eval_queen(pos, board):
-	score = CS.QUEEN
+	score = MOVES.QUEEN
 	eval_board = flip_board(board)
 	if PLAYER is 1:
 		eval_pos = (7 - pos[0], 7 - pos[1])
@@ -167,13 +167,13 @@ def eval_queen(pos, board):
 
 
 def eval_king(pos, board):
-	score = CS.KING
+	score = MOVES.KING
 	eval_board = flip_board(board)
 	if PLAYER is 1:
 		eval_pos = (7 - pos[0], 7 - pos[1])
 	else:
 		eval_pos = pos
-	score += king_weights[eval_pos[0]][eval_pos[1]]
+	score += king_table[eval_pos[0]][eval_pos[1]]
 	score += eval_piece(eval_pos, eval_board)
 	return score
 
