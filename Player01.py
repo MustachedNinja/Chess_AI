@@ -55,13 +55,18 @@ def prepare():
 
 
 def dumb_heuristic(board):
+    """
+    Loops through the board and generates a sum of all the pieces weights
+    param board: 2D list of ints representation of board
+    return: a board score (int)
+    """
     count = 0
-    for row in board:
-        for col in board[row]:
+    for row in range(8):
+        for col in range(8):
             piece = board[row][col]
             if piece != 0:
                 if piece % 2 != PLAYERS_TURN:
                     count -= piece
-                elif piece % 2 == PLAYERS_TURN:
+                else:
                     count += piece
     return count
