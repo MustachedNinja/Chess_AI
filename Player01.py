@@ -23,7 +23,7 @@ def initPlayersTurnsVar(curr_state):
 
 
 def make_move(current_state):
-    print("Trying to move player 1")
+    print("Trying to move player " , PLAYERS_TURN)
 
     if PLAYERS_TURN is None:
         initPlayersTurnsVar(current_state)
