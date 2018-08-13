@@ -1,5 +1,6 @@
 import EvaluatePiece as EP
 import GenerateMoves as MOVES
+import Player01 as PLAYER
 NUM_TIMES_PRUNED = 0
 
 # ==================== DOCUMENTATION ====================
@@ -53,7 +54,10 @@ def alphabeta(currentState, depth_left, A, B, bool_maximizingPlayer, player_numb
     
     # base: no more tree discovering. Return the heuristic score for the given board state
     if (depth_left == 0):
-        return EP.eval_board(currentState.board, player_number)
+        # return PLAYER.dumb_heuristic(currentState.board, player_number)
+        val = EP.eval_board(currentState.board, player_number)
+        print(val)
+        return val
 
     # get all children moves from the given node
     children = MOVES.generate_moves(player_number, currentState.board)
@@ -76,7 +80,7 @@ def alphabeta(currentState, depth_left, A, B, bool_maximizingPlayer, player_numb
             returnedInformation = alphabeta(child_state, depth_left - 1, A, B, False, nextTurnPlayerNumber)
             old_v = v
             v = max(v, returnedInformation)
-            print(v)
+            # print(v)
             # check if it was changed. if it was update Node
             if v is not old_v:
                 # best_child = returnedInformation[1]
@@ -104,7 +108,7 @@ def alphabeta(currentState, depth_left, A, B, bool_maximizingPlayer, player_numb
             # alphabeta(working_board, depth_left - 1, A, B, True, nextTurnPlayerNumber)
             old_v = v
             v = min(v, returnedInformation)
-            print(v)
+            # print(v)
             # check if it was changed. if it was update best child
             if v is not old_v:
                 # best_child = returnedInformation[1]

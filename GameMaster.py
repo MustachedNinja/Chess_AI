@@ -8,7 +8,7 @@ import GenerateMoves as MOVES
 
 PLAY_AGAINST_MYSELF = False
 TIME_PER_MOVE = 10000
-TURN_LIMIT = 300
+TURN_LIMIT = 25
 
 if len(sys.argv) > 1:
     import importlib

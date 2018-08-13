@@ -48,8 +48,8 @@ king_table = (
  [ 20, 20,  0,  0,  0,  0, 20, 20],
  [ 20, 30, 10,  0,  0, 10, 30, 20]])
 
-def flip_board(board):
-	if PLAYER is 1:
+def flip_board(board, player):
+	if player is 0:
 		new_board = [[0, 0, 0, 0, 0, 0, 0, 0] for r in range(8)]
 		for row in range(8):
 			for col in range(8):
@@ -62,46 +62,61 @@ def eval_board(board, player):
 	global PLAYER
 	PLAYER = player
 
-	bishop_count = 0
+	friend_bishop = 0
+	enemy_bishop = 0
 	board_count = 0
-	
+	enemy_king_pos = None
+	friend_king_pos = None
+
+	# For each piece on the board
 	for row in range(8):
 		for col in range(8):
-			if CS.who(board[row][col]) == PLAYER:
+			piece = board[row][col]
+			# If piece is not 0
+			if piece != 0:
+				piece_player = piece % 2
+				piece -= piece_player
 				piece_pos = (row, col)
-				piece = board[piece_pos[0]][piece_pos[1]]
-				piece -= (piece % 2)
 
 				if piece == MOVES.PAWN:
-					piece_val = eval_pawn(piece_pos, board)
+					piece_val = eval_pawn(piece_pos, board, piece_player)
 				elif piece == MOVES.ROOK:
-					piece_val = eval_rook(piece_pos, board)
+					piece_val = eval_rook(piece_pos, board, piece_player)
 				elif piece == MOVES.KNIGHT:
-					piece_val = eval_knight(piece_pos, board)
+					piece_val = eval_knight(piece_pos, board, piece_player)
 				elif piece == MOVES.BISHOP:
-					bishop_count += 1
-					piece_val = eval_bishop(piece_pos, board)
+					if piece_player is player:
+						friend_bishop += 1
+					else:
+						enemy_bishop += 1
+					piece_val = eval_bishop(piece_pos, board, piece_player)
 				elif piece == MOVES.QUEEN:
-					piece_val = eval_queen(piece_pos, board)
+					piece_val = eval_queen(piece_pos, board, piece_player)
 				elif piece == MOVES.KING:
-					piece_val = eval_king(piece_pos, board)
-				board_count += piece_val
-	if bishop_count is 2:
+					piece_val = eval_king(piece_pos, board, piece_player)
+
+				if piece_player is player:
+					board_count += piece_val
+				else:
+					board_count -= piece_val
+	if friend_bishop is 2:
 		board_count += 10
+	if enemy_bishop is 2:
+		board_count -= 10
 	return board_count
 
 
-def eval_piece(pos, board):
+def eval_piece(pos, board, player):
 	"""
-	Calculates a score based on whether a piece is attacked or defended. 
+	Calculates a score based on wh, playerether a piece is attacked or defended. 
 	Promotes being defended with no attackers.
 	param pos: position of piece on board as a tuple of ints
 	param board: current board configuration as a 2D array of ints
 	return: the score depending on whether the piece is defended or attacked
 	"""
 	score = 0
-	defended_val = is_defended(pos, board)
-	attacked_val = is_attacked(pos, board)
+	defended_val = is_defended(pos, board, player)
+	attacked_val = is_attacked(pos, board, player)
 	if defended_val < abs(attacked_val):
 		score += 2 * attacked_val
 	else:
@@ -109,76 +124,62 @@ def eval_piece(pos, board):
 	return score
 
 
-def eval_pawn(pos, board):
+def eval_pawn(pos, board, player):
 	score = MOVES.PAWN
-	eval_board = flip_board(board)
-	if PLAYER is 1:
+	if player is 0:
 		eval_pos = (7 - pos[0], 7 - pos[1])
 	else:
 		eval_pos = pos
 	score += pawn_weights[eval_pos[0]][eval_pos[1]]
-	score += eval_piece(eval_pos, eval_board)
+	score += eval_piece(pos, board, player)
 	return score
 
 
-def eval_rook(pos, board):
+def eval_rook(pos, board, player):
 	score = MOVES.ROOK
-	eval_board = flip_board(board)
-	if PLAYER is 1:
-		eval_pos = (7 - pos[0], 7 - pos[1])
-	else:
-		eval_pos = pos
-	score += eval_piece(eval_pos, eval_board)
+	score += eval_piece(pos, board, player)
 	return score
 
 
-def eval_knight(pos, board):
+def eval_knight(pos, board, player):
 	score = MOVES.KNIGHT
-	eval_board = flip_board(board)
-	if PLAYER is 1:
+	if player is 0:
 		eval_pos = (7 - pos[0], 7 - pos[1])
 	else:
 		eval_pos = pos
 	score += knight_weights[eval_pos[0]][eval_pos[1]]
-	score += eval_piece(eval_pos, eval_board)
+	score += eval_piece(pos, board, player)
 	return score
 
-def eval_bishop(pos, board):
+def eval_bishop(pos, board, player):
 	score = MOVES.BISHOP
-	eval_board = flip_board(board)
-	if PLAYER is 1:
+	if player is 0:
 		eval_pos = (7 - pos[0], 7 - pos[1])
 	else:
 		eval_pos = pos
 	score += bishop_weights[eval_pos[0]][eval_pos[1]]
-	score += eval_piece(eval_pos, eval_board)
+	score += eval_piece(pos, board, player)
 	return score
 
 
-def eval_queen(pos, board):
+def eval_queen(pos, board, player):
 	score = MOVES.QUEEN
-	eval_board = flip_board(board)
-	if PLAYER is 1:
-		eval_pos = (7 - pos[0], 7 - pos[1])
-	else:
-		eval_pos = pos
-	score += eval_piece(eval_pos, eval_board)
+	score += eval_piece(pos, board, player)
 	return score
 
 
-def eval_king(pos, board):
+def eval_king(pos, board, player):
 	score = MOVES.KING
-	eval_board = flip_board(board)
-	if PLAYER is 1:
+	if player is 0:
 		eval_pos = (7 - pos[0], 7 - pos[1])
 	else:
 		eval_pos = pos
 	score += king_table[eval_pos[0]][eval_pos[1]]
-	score += eval_piece(eval_pos, eval_board)
+	score += eval_piece(pos, board, player)
 	return score
 
 
-def is_defended(pos, board):
+def is_defended(pos, board, player):
 	"""
 	Determines if a piece is defended or not and returns a value that is larger 
 	if the defending piece is weaker than the defended piece
@@ -187,32 +188,30 @@ def is_defended(pos, board):
 	param player: current player as an int of 0 or 1
 	return: int the determines whether a piece is defended
 	"""
-	# first two can be either pawns, king or queen, next 6 are king, next 8 are knights
-	relative_pos = [(-1, -1), (-1, 1), (1, 0), (1, 1), (1, -1), (-1, 0), (0, 1), (0, -1)]
-	knight_pos = [(1, 2), (-1, 2), (1, -2), (-1, -2), (2, 1), (-2, 1), (2, -1), (-2, -1)]
+	total_list = [(1, 2), (-1, 2), (1, -2), (-1, -2), (2, 1), (-2, 1), (2, -1), (-2, -1)]
 	
-	total_list = []
-	total_list = total_list + relative_pos
-	total_list = total_list + knight_pos
-	queen_check(pos, board, total_list, PLAYER)
+	queen_check(pos, board, total_list, player)
 
-	piece = board[pos[0]][pos[1]] - PLAYER
+	piece = board[pos[0]][pos[1]] - player
 
-	for piece_pos in total_list:
+	relative_pos = []
+	for rel in total_list:
+		new_pos = (rel[0] + pos[0], rel[1] + pos[1])
+		relative_pos.append(new_pos)
+
+	for piece_pos in relative_pos:
 		if legal_move(piece_pos):
-
 			defend_piece = board[piece_pos[0]][piece_pos[1]]
-			defend_piece = defend_piece - defend_piece % 2
-
-			if defend_piece is not 0 and defend_piece % 2 is PLAYER:
-				if piece > defend_piece:
+			if defend_piece is not 0 and defend_piece % 2 is player:
+				defend_val = defend_piece - (defend_piece % 2)
+				if piece > defend_val:
 					return 15
 				else:
-					return 7
+					return 8                      
 	return 0
 
 
-def is_attacked(pos, board):
+def is_attacked(pos, board, player):
 	"""
 	Determines if a piece is attacked and returns a value that is larger
 	if the attacking piece is weaker than the attacked piece
@@ -221,30 +220,31 @@ def is_attacked(pos, board):
 	param player: current player as an int of 0 or 1
 	return: int the determines whether a piece is attacked
 	"""
-	relative_pos = [(-1, -1), (-1, 1), (1, 0), (1, 1), (1, -1), (-1, 0), (0, 1), (0, -1)]
-	knight_pos = [(1, 2), (-1, 2), (1, -2), (-1, -2), (2, 1), (-2, 1), (2, -1), (-2, -1)]
-	
-	total_list = []
-	total_list = total_list + relative_pos
-	total_list = total_list + knight_pos
+	total_list = [(1, 2), (-1, 2), (1, -2), (-1, -2), (2, 1), (-2, 1), (2, -1), (-2, -1)]
 
-	if PLAYER is 1:
+	piece = board[pos[0]][pos[1]]
+	piece_player = piece % 2
+	piece -= piece_player
+
+	if piece_player is 1:
 		enemy = 0
 	else:
 		enemy = 1
 	
 	queen_check(pos, board, total_list, enemy)
 
-	piece = board[pos[0]][pos[1]] - PLAYER
+	relative_pos = []
+	for rel in total_list:
+		new_pos = (rel[0] + pos[0], rel[1] + pos[1])
+		relative_pos.append(new_pos)
 
-	for piece_pos in total_list:
+	for piece_pos in relative_pos:
 		if legal_move(piece_pos):
 
 			attack_piece = board[piece_pos[0]][piece_pos[1]]
-			attack_piece = attack_piece - attack_piece % 2
-			
 			if attack_piece is not 0 and attack_piece % 2 is enemy:
-				if piece > attack_piece:
+				attack_val = attack_piece - (attack_piece % 2)
+				if piece > attack_val:
 					return -15
 				else:
 					return -8
@@ -283,6 +283,6 @@ def legal_move(pos):
 	:return: True or false
 	"""
 	if 0 <= pos[0] < 8 and 0 <= pos[1] < 8:
-			return True
+		return True
 	else:
 		return False

@@ -54,7 +54,7 @@ p p p p p p p p
 - - - - - - - -
 - - - - - - - -
 P P P P P P P P
-R K B Q K B H R
+R H B Q K B H R
 '''    
 )
 

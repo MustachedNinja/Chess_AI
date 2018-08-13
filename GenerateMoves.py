@@ -103,13 +103,13 @@ def generate_pawn(pos, board, list):
         kill_pos2 = (pos[0] + 1, pos[1] - 1)
         if legal_move(kill_pos1):
             kill_piece1 = board[kill_pos1[0]][kill_pos1[1]]
-            if kill_piece1 % 2 == 0 and kill_piece1 != 0:
+            if kill_piece1 % 2 == 1:
                 move_pos = (pos, kill_pos1)
                 move = [move_pos, generate_state(move_pos, board)]
                 list.append(move)
         if legal_move(kill_pos2):
             kill_piece2 = board[kill_pos2[0]][kill_pos2[1]]
-            if kill_piece2 % 2 == 0 and kill_piece2 != 0:
+            if kill_piece2 % 2 == 1:
                 move_pos = (pos, kill_pos2)
                 move = [move_pos, generate_state(move_pos, board)]
                 list.append(move)
@@ -138,13 +138,13 @@ def generate_pawn(pos, board, list):
         kill_pos2 = (pos[0] - 1, pos[1] - 1)
         if legal_move(kill_pos1):
             kill_piece1 = board[kill_pos1[0]][kill_pos1[1]]
-            if kill_piece1 % 2 == 1:
+            if kill_piece1 % 2 == 0 and kill_piece1 is not 0:
                 move_pos = (pos, kill_pos1)
                 move = [move_pos, generate_state(move_pos, board)]
                 list.append(move)
         if legal_move(kill_pos2):
             kill_piece2 = board[kill_pos2[0]][kill_pos2[1]]
-            if kill_piece2 % 2 == 1:
+            if kill_piece2 % 2 == 0 and kill_piece2 is not 0:
                 move_pos = (pos, kill_pos2)
                 move = [move_pos, generate_state(move_pos, board)]
                 list.append(move)

@@ -7,6 +7,7 @@ import random
 import ChessState as CS
 import GenerateMoves as MOVES
 import AlphaBeta as AB
+import EvaluatePiece as EVAL
 PLAYERS_TURN = None
 
 
@@ -25,6 +26,7 @@ def initPlayersTurnsVar(curr_state):
 
 
 def make_move(current_state):
+    print("EVAL: " + str(EVAL.eval_board(current_state.board, current_state.whose_move)))
     print("Trying to move player " , PLAYERS_TURN)
 
     if PLAYERS_TURN is None:
@@ -44,11 +46,6 @@ def make_move(current_state):
 
     # print('hey check for correct form')
     # print(best_move[1])
-
-
-
-
-
 
     return best_move[1]
 
@@ -76,7 +73,7 @@ def prepare():
     pass
 
 
-def dumb_heuristic(board):
+def dumb_heuristic(board, player):
     """
     Loops through the board and generates a sum of all the pieces weights
     param board: 2D list of ints representation of board
@@ -87,8 +84,8 @@ def dumb_heuristic(board):
         for col in range(8):
             piece = board[row][col]
             if piece != 0:
-                if piece % 2 != PLAYERS_TURN:
-                    count -= piece
+                if piece % 2 is not player:
+                    count -= (piece - player)
                 else:
-                    count += piece
+                    count += (piece - player)
     return count
