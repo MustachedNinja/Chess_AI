@@ -1,12 +1,12 @@
 """
-Used to evaluate the static value of a piece at a given position on the board
+Used to evaluate the heuristic value of a given board
+Call eval_board(board, player) to evaluate your board
 """
 
 import ChessState as CS
 import GenerateMoves as MOVES
 
 PLAYER = 0
-
 
 pawn_weights = (
 [[ 0,  0,  0,  0,  0,  0,  0,  0],
@@ -48,17 +48,14 @@ king_table = (
  [ 20, 20,  0,  0,  0,  0, 20, 20],
  [ 20, 30, 10,  0,  0, 10, 30, 20]])
 
-def flip_board(board, player):
-	if player is 0:
-		new_board = [[0, 0, 0, 0, 0, 0, 0, 0] for r in range(8)]
-		for row in range(8):
-			for col in range(8):
-				new_board[row][col] = board[7-row][7-col]
-		return new_board
-	else:
-		return board
 
 def eval_board(board, player):
+	"""
+	Produces a heuristic value representing the quality of the board for the given player
+	:param board: 2D list of ints representation of the current board
+	:param player: integer representation of the player whose position is to be evaluated
+	:return: integer representation of board quality
+	"""
 	global PLAYER
 	PLAYER = player
 
@@ -106,24 +103,6 @@ def eval_board(board, player):
 	return board_count
 
 
-def eval_piece(pos, board, player):
-	"""
-	Calculates a score based on wh, playerether a piece is attacked or defended. 
-	Promotes being defended with no attackers.
-	param pos: position of piece on board as a tuple of ints
-	param board: current board configuration as a 2D array of ints
-	return: the score depending on whether the piece is defended or attacked
-	"""
-	score = 0
-	defended_val = is_defended(pos, board, player)
-	attacked_val = is_attacked(pos, board, player)
-	if defended_val < abs(attacked_val):
-		score += 2 * attacked_val
-	else:
-		score += (defended_val + attacked_val)
-	return score
-
-
 def eval_pawn(pos, board, player):
 	score = MOVES.PAWN
 	if player is 0:
@@ -150,6 +129,7 @@ def eval_knight(pos, board, player):
 	score += knight_weights[eval_pos[0]][eval_pos[1]]
 	score += eval_piece(pos, board, player)
 	return score
+
 
 def eval_bishop(pos, board, player):
 	score = MOVES.BISHOP
@@ -179,86 +159,134 @@ def eval_king(pos, board, player):
 	return score
 
 
-def is_defended(pos, board, player):
+def eval_piece(pos, board, player):
 	"""
-	Determines if a piece is defended or not and returns a value that is larger 
-	if the defending piece is weaker than the defended piece
-	param pos: position of piece as a tuple of ints
-	param board: current board state as a 2D array of ints
-	param player: current player as an int of 0 or 1
-	return: int the determines whether a piece is defended
+	Calculates a score based on wh, playerether a piece is attacked or defended. 
+	Promotes being defended with no attackers.
+	param pos: position of piece on board as a tuple of ints
+	param board: current board configuration as a 2D array of ints
+	return: the score depending on whether the piece is defended or attacked
 	"""
-	total_list = [(1, 2), (-1, 2), (1, -2), (-1, -2), (2, 1), (-2, 1), (2, -1), (-2, -1)]
-	
-	queen_check(pos, board, total_list, player)
-
-	piece = board[pos[0]][pos[1]] - player
-
-	relative_pos = []
-	for rel in total_list:
-		new_pos = (rel[0] + pos[0], rel[1] + pos[1])
-		relative_pos.append(new_pos)
-
-	for piece_pos in relative_pos:
-		if legal_move(piece_pos):
-			defend_piece = board[piece_pos[0]][piece_pos[1]]
-			if defend_piece is not 0 and defend_piece % 2 is player:
-				defend_val = defend_piece - (defend_piece % 2)
-				if piece > defend_val:
-					return 15
-				else:
-					return 8                      
-	return 0
+	score = 0
+	defended_val = is_defended(pos, board, player)
+	attacked_val = is_attacked(pos, board, player)
+	if defended_val < abs(attacked_val):
+		score += 2 * attacked_val
+	else:
+		score += (defended_val + attacked_val)
+	return score
 
 
 def is_attacked(pos, board, player):
 	"""
-	Determines if a piece is attacked and returns a value that is larger
-	if the attacking piece is weaker than the attacked piece
-	param pos: position of piece as a tuple of ints
-	param board: current board state as a 2D array of ints
-	param player: current player as an int of 0 or 1
-	return: int the determines whether a piece is attacked
+	Computes whether a piece is attacked by weaker pieces or not
 	"""
-	total_list = [(1, 2), (-1, 2), (1, -2), (-1, -2), (2, 1), (-2, 1), (2, -1), (-2, -1)]
-
-	piece = board[pos[0]][pos[1]]
-	piece_player = piece % 2
-	piece -= piece_player
-
-	if piece_player is 1:
-		enemy = 0
-	else:
+	attacked_score = 0
+	if player is 0:
 		enemy = 1
-	
-	queen_check(pos, board, total_list, enemy)
+	else:
+		enemy = 0
 
-	relative_pos = []
-	for rel in total_list:
-		new_pos = (rel[0] + pos[0], rel[1] + pos[1])
-		relative_pos.append(new_pos)
+	if player is 0:
+		pawn_list = [(1, -1), (1, 1)]
+	else:
+		pawn_list = [(-1, -1), (-1, 1)]
+	attacked_score -= check_defended_list(pawn_list, pos, board, enemy, MOVES.PAWN)
 
-	for piece_pos in relative_pos:
-		if legal_move(piece_pos):
+	knight_list = [(1, 2), (1, -2), (-1, -2), (-1, 2), (2, 1), (2, -1), (-2, 1), (-2, -1)]
+	attacked_score -= check_defended_list(knight_list, pos, board, enemy, MOVES.KNIGHT)
 
-			attack_piece = board[piece_pos[0]][piece_pos[1]]
-			if attack_piece is not 0 and attack_piece % 2 is enemy:
-				attack_val = attack_piece - (attack_piece % 2)
-				if piece > attack_val:
-					return -15
-				else:
-					return -8
-	return 0
+	bishop_list = []
+	bishop_direction = [(1, 1), (1, -1), (-1, 1), (-1, -1)]
+	for direction in bishop_direction:
+		directional_check(pos, board, direction, 8, bishop_list, enemy)
+	attacked_score -= check_defended_list(bishop_list, pos, board, enemy, MOVES.BISHOP)
+
+	rook_list = []
+	rook_direction = [(1, 0), (0, 1), (-1, 0), (0, -1)]
+	for direction in rook_direction:
+		directional_check(pos, board, direction, 8, rook_list, enemy)
+	attacked_score -= check_defended_list(rook_list, pos, board, enemy, MOVES.ROOK)
+
+	queen_list = rook_list + bishop_list
+	attacked_score -= check_defended_list(queen_list, pos, board, enemy, MOVES.QUEEN)
+
+	king_list = [(1, 0), (0, 1), (1, 1), (-1, -1), (-1, 1), (1, -1), (-1, 0), (0, -1)]
+	attacked_score -= check_defended_list(king_list, pos, board, enemy, MOVES.KING)
+
+	return attacked_score
 
 
-def queen_check(pos, board, list_var, limit_player):
-	directions = [(1, 1), (-1, -1), (1, -1), (-1, 1), (1, 0), (-1, 0), (0, 1), (0, -1)]
-	
-	for direction in directions:
-		directional_check(pos, board, direction, 8, list_var, limit_player)
+def is_defended(pos, board, player):
+	"""
+	Computes whether a piece is defended by weaker pieces or not
+	"""
+	defended_score = 0
+	if player is 0:
+		pawn_list = [(-1, -1), (-1, 1)]
+	else:
+		pawn_list = [(1, -1), (1, 1)]
+	defended_score += check_defended_list(pawn_list, pos, board, player, MOVES.PAWN)
+
+	knight_list = [(1, 2), (1, -2), (-1, -2), (-1, 2), (2, 1), (2, -1), (-2, 1), (-2, -1)]
+	defended_score += check_defended_list(knight_list, pos, board, player, MOVES.KNIGHT)
+
+	bishop_list = []
+	bishop_direction = [(1, 1), (1, -1), (-1, 1), (-1, -1)]
+	for direction in bishop_direction:
+		directional_check(pos, board, direction, 8, bishop_list, player)
+	defended_score += check_defended_list(bishop_list, pos, board, player, MOVES.BISHOP)
+
+	rook_list = []
+	rook_direction = [(1, 0), (0, 1), (-1, 0), (0, -1)]
+	for direction in rook_direction:
+		directional_check(pos, board, direction, 8, rook_list, player)
+	defended_score += check_defended_list(rook_list, pos, board, player, MOVES.ROOK)
+
+	queen_list = rook_list + bishop_list
+	defended_score += check_defended_list(queen_list, pos, board, player, MOVES.QUEEN)
+
+	king_list = [(1, 0), (0, 1), (1, 1), (-1, -1), (-1, 1), (1, -1), (-1, 0), (0, -1)]
+	defended_score += check_defended_list(king_list, pos, board, player, MOVES.KING)
+
+	return defended_score
+
+
+def check_defended_list(defend_list, pos, board, player, piece):
+	"""
+	Check if a |piece| exists in the |defend_list| which is defending the piece at the given |pos|
+	"""
+	score = 0
+	for temp_pos in defend_list:
+		rel_pos = (pos[0] + temp_pos[0], pos[1] + temp_pos[1])
+		if legal_move(rel_pos):
+			rel_piece = board[rel_pos[0]][rel_pos[1]]
+			if rel_piece is not 0 and rel_piece % 2 is player and rel_piece - (rel_piece % 2) is piece:
+				score += compare_weight(pos, rel_pos, board)
+	return score
+
+
+def compare_weight(pos1, pos2, board):
+	"""
+	Compares the value of a defended piece to that of its defending piece and returns an int
+	:param pos1: the position as a tuple of ints (int, int) of the defended piece
+	:param pos2: the position as a tuple of ints (int, int) of the defending piece
+	"""
+	piece1 = board[pos1[0]][pos1[1]]
+	piece2 = board[pos2[0]][pos2[1]]
+	if piece1 > piece2:
+		return 15
+	elif piece2 > piece1:
+		return 8
+	else:
+		return 0
 
 
 def directional_check(pos, board, direction, step_size, list_var, limit_player):
+	"""
+	Generates a list of positions (tuples) along a set direction until it encounters a piece or the edge of the board
+	step_size determines how many spaces in the given direction to look
+	"""
 	
 	new_pos = (pos[0] + direction[0], pos[1] + direction[1])
 	if not legal_move(new_pos):
@@ -275,6 +303,7 @@ def directional_check(pos, board, direction, step_size, list_var, limit_player):
 			return
 		new_piece = board[new_pos[0]][new_pos[1]]
 		step_size -= 1
+
 
 def legal_move(pos):
 	"""

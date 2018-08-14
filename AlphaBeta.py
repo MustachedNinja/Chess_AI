@@ -56,7 +56,7 @@ def alphabeta(currentState, depth_left, A, B, bool_maximizingPlayer, player_numb
     if (depth_left == 0):
         # return PLAYER.dumb_heuristic(currentState.board, player_number)
         val = EP.eval_board(currentState.board, player_number)
-        print(val)
+        # print(val)
         return val
 
     # get all children moves from the given node
