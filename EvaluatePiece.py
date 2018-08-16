@@ -1,6 +1,24 @@
 """
 Used to evaluate the heuristic value of a given board
 Call eval_board(board, player) to evaluate your board
+
+
+HOW EVALUATION WORKS:
+
+Eval_board loops through every piece on the board and assigns it a score depending on how good its position is
+There are three factors that affect whether a piece is in a good position or not:
+	Weight tables: Each piece has positions on the board that it should generally strive for. 
+		On the weight tables each position is assigned a score based on how advantageous it is for the given piece
+	Defenders: This checks whether a piece is defended, and encourages pieces to be defended by pieces that are weaker than themselves
+		For example, this algorithm would prefer a bishop were defended by a pawn rather than a queen
+	Attackers: This checks whether a piece is attacked. This algorithm discourages being attacked by a piece weaker than yourself.
+		For example, being attacked by a piece stronger than yourself is mildly discouraged, 
+		but being attacked by a piece weaker than yourself is strongly discouraged 
+In addition to this, the pieces individual weights are added to the sum (this is not the same as the weight table)
+Finally, there are a couple final calculation rules:
+	if the Defenders value is smaller than the attackers value, then we highly discourage this situation by 
+		multiplying the attacker value by 2 and subtracting it from the overall score
+	we gain an extra bonus if we still own two bishops, and an added bonus if the enemy has less than two bishops
 """
 
 import ChessState as CS
