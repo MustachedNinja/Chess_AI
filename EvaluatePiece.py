@@ -118,8 +118,19 @@ def eval_board(board, player):
 		board_count += 10
 	if enemy_bishop is 2:
 		board_count -= 10
+	board_count += check_king(board, player)
 	return board_count
 
+
+def check_king(board, player):
+	for row in range(8):
+		for col in range(8):
+			piece = board[row][col]
+			piece_player = piece % 2
+			piece_val = piece - piece_player
+			if piece_player is not player and piece_val is MOVES.KING:
+				return 50000
+	return 0
 
 def eval_pawn(pos, board, player):
 	score = MOVES.PAWN

@@ -42,7 +42,7 @@ def make_move(current_state):
 
     print('Calling ALPHA BETA')
 
-    best_move = AB.runAlphaBeta(PLAYERS_TURN, current_state, 3)
+    best_move = AB.runAlphaBeta(PLAYERS_TURN, current_state, 1)
 
     # print('hey check for correct form')
     # print(best_move[1])
