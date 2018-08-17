@@ -56,8 +56,8 @@ def alphabeta(currentState, depth_left, A, B, bool_maximizingPlayer, player_numb
     if (depth_left == 0):
         # return PLAYER.dumb_heuristic(currentState.board, player_number)
         val = EP.eval_board(currentState.board, player_number)
-        # print(val)
-        return val
+        # print('val = ' + str(val))
+        return val, currentState
 
     # get all children moves from the given node
     children = MOVES.generate_moves(player_number, currentState.board)
@@ -79,7 +79,8 @@ def alphabeta(currentState, depth_left, A, B, bool_maximizingPlayer, player_numb
             # v = max(v, alphabeta(child, depth_left - 1, A, B, False))
             returnedInformation = alphabeta(child_state, depth_left - 1, A, B, False, nextTurnPlayerNumber)
             old_v = v
-            v = max(v, returnedInformation)
+            # print('returned Information: ' + str(returnedInformation))
+            v = max(v, returnedInformation[0])
             # print(v)
             # check if it was changed. if it was update Node
             if v is not old_v:
@@ -107,7 +108,7 @@ def alphabeta(currentState, depth_left, A, B, bool_maximizingPlayer, player_numb
             returnedInformation = alphabeta(child_state, depth_left - 1, A, B, True, nextTurnPlayerNumber)
             # alphabeta(working_board, depth_left - 1, A, B, True, nextTurnPlayerNumber)
             old_v = v
-            v = min(v, returnedInformation)
+            v = min(v, returnedInformation[0])
             # print(v)
             # check if it was changed. if it was update best child
             if v is not old_v:
