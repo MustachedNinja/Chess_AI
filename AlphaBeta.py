@@ -91,7 +91,7 @@ def alphabeta(currentState, depth_left, A, B, bool_maximizingPlayer, player_numb
             if B <= A:
                 updatePruning()
                 break # (* B cut-off *):
-        # print(best_child)
+        # print("BEST_MOVE: " + str(v) + ", " + str(depth_left) + ", " + str(best_child[0]))
         return v, best_child
     # Minimizing player
     else:
@@ -119,7 +119,7 @@ def alphabeta(currentState, depth_left, A, B, bool_maximizingPlayer, player_numb
             if B <= A:
                 updatePruning()
                 break # (* A cut-off *)
-        # print(best_child)
+        # print("BEST_MOVE (Minimizing): " + str(v) + ", " + str(depth_left))
         return v, best_child
 
  

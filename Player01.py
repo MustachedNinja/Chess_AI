@@ -26,11 +26,11 @@ def initPlayersTurnsVar(curr_state):
 
 
 def make_move(current_state):
+    global PLAYERS_TURN   
+    PLAYERS_TURN = current_state.whose_move
     print("EVAL: " + str(EVAL.eval_board(current_state.board, current_state.whose_move)))
     print("Trying to move player " , PLAYERS_TURN)
 
-    if PLAYERS_TURN is None:
-        initPlayersTurnsVar(current_state)
     MOVES.PLAYERS_TURN = PLAYERS_TURN
     new_state = CS.ChessState(current_state.board)
 
@@ -42,7 +42,10 @@ def make_move(current_state):
 
     print('Calling ALPHA BETA')
 
-    best_move = AB.runAlphaBeta(PLAYERS_TURN, current_state, 1)
+    best_move = AB.runAlphaBeta(PLAYERS_TURN, current_state, 3)
+    temp_move = best_move[1]
+    best_state = temp_move[1]
+    # print("EVAL: " + str(EVAL.eval_board(best_state.board, best_state.whose_move)) + ", " + str(temp_move))
 
     # print('hey check for correct form')
     # print(best_move[1])

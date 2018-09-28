@@ -13,7 +13,7 @@ TURN_LIMIT = 300
 if len(sys.argv) > 1:
     import importlib
     player1 = importlib.import_module(sys.argv[1])
-    player2 = importlib.import_module(sys.argv[2])
+    player2 = importlib.import_module(sys.argv[1])
 
     print("Player 1 is: " + str(player1))
     print("Player 2 is: " + str(player2))
@@ -103,8 +103,10 @@ def run_game():
         global CURRENT_PLAYER
         CURRENT_PLAYER = who
         if WHITEs_turn:
+            current_state.whose_move = 0
             move_fn = player1.make_move(current_state)
         else:
+            current_state.whose_move = 1
             move_fn = player2.make_move(current_state)
         # player_result = timeout(move_fn, args=(current_state, current_remark, TIME_PER_MOVE), kwargs={},
                                 # timeout_duration=TIME_PER_MOVE, default=(None, "I give up!"))
